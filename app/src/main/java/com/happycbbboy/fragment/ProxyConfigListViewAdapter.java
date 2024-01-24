@@ -79,7 +79,7 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
             itermView.edit = (Button) view.findViewById(R.id.ProxyItermEdit);
             itermView.delete = (Button) view.findViewById(R.id.ProxyItermDelete);
 
-            view.setTag(itermView); // 重要！确保将ViewHolder存储在Tag中
+            view.setTag(itermView);
         } else {
             itermView = (ItermView) view.getTag();
         }

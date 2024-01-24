@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private BroadcastReceiver vpnSuccessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("onReceive1111111");
-            ;
             Notify vpnParam = (Notify) intent.getExtras().get(Notify.PARAM_KEY);
             if (vpnParam != null) {
                 showCustomDialog(vpnParam.getTitle(), vpnParam.getMsg());

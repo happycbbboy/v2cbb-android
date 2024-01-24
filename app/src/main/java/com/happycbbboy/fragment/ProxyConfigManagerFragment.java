@@ -78,7 +78,6 @@ public class ProxyConfigManagerFragment extends Fragment {
 
         // 创建保存按钮
         ImageButton btnSave = new ImageButton(application);
-//        btnSave.setText("");
         btnSave.setImageResource(R.drawable.baseline_done_24);
 
         // 设置保存按钮的点击事件
@@ -110,40 +109,7 @@ public class ProxyConfigManagerFragment extends Fragment {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        /**
-         *         android:layout_alignParentEnd="true"
-         *         android:layout_alignParentRight="true"
-         *         android:layout_gravity="end"></RelativeLayout>
-         */
-//        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_END);
-//        params.addRule(RelativeLayout.TEXT_ALIGNMENT_GRAVITY);
-//        params.setMargins(0, 30, 1, 0); // 可以根据需要调整边距
         Toolbar layout = mainView.findViewById(R.id.toolbar);
         layout.addView(btnSave, params);
-//        Button submitProxyConfButtom = (Button) getView().findViewById(R.id.SubmitProxyConf);
-//        submitProxyConfButtom.setOnClickListener(new ProxyConfigManagerOnClick());
     }
-/*
-    class ProxyConfigManagerOnClick implements View.OnClickListener {
-        public void onClick(View v) {
-            ProxyConfig pc = new ProxyConfig();
-
-            pc.setId(id);
-            pc.setName(name.getText().toString());
-            pc.setProxyConf(proxyConfig.getText().toString());
-
-            mDisposable.add(proxyConfigDao.insertAll(pc)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                                androidx.fragment.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.container, new ProxyConfigFragment(application,mainView, null));
-                                fragmentTransaction.commit();
-                            },
-                            throwable -> Log.e("ProxyConfigManagerOnClick", "Unable to update username", throwable)));
-
-        }
-    }*/
 }
