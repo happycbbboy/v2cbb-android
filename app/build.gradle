@@ -1,0 +1,70 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.happycbbboy'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.happycbbboy"
+        minSdk 28
+        targetSdk 33
+        versionCode global_app_version_code
+        versionName global_app_version_name
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            versionNameSuffix global_app_version_name
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+//    用户toolbar
+    implementation 'com.yarolegovich:sliding-root-nav:1.1.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // vpn service
+    implementation project(":vpn-lib")
+    implementation fileTree(include: ['*.aar','*.jar'], dir: 'libs')
+
+
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // optional - RxJava2 support for Room
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    // optional - RxJava3 support for Room
+    implementation "androidx.room:room-rxjava3:$room_version"
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+    // optional - Paging 3 Integration
+    implementation "androidx.room:room-paging:$room_version"
+    implementation 'com.alibaba:fastjson:1.1.54.android'
+    implementation "androidx.room:room-runtime:$room_version"
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+}
