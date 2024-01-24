@@ -1,5 +1,5 @@
 # v2cbb-android
-适用于Android的V2Ray客户端，可以实现匿名上网，远程访问,vpn等方案
+适用于Android的V2Ray客户端，可以实现匿名上网，远程访问，vpn等方案
 
 ![256](./assets/256.png)
 
