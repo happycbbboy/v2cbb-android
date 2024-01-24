@@ -2,6 +2,7 @@
 适用于Android的V2Ray客户端，可以实现匿名上网，远程访问等方案
 
 ![256](./assets/256.png)
+
 [English](README_EN.md) | 简体中文
 
 ## 使用
