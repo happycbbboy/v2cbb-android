@@ -4,6 +4,62 @@
 ![256](./assets/256.png)
 [English](README_EN.md) | 简体中文
 
+## 使用
+
+在代理配置里面写上[v2ray](https://v2ray.com/)的config配置文件即可，只需要写outbounds和route即可
+
+```json
+{
+  "log": {
+    "loglevel": "debug"
+  },
+  "outbounds": [
+    {
+      "tag": "Proxy",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "xxxxxxxxxxx",
+            "port": 443,
+            "users": [
+              {
+                "id": "xxxxxx"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "127.0.0.1",
+          "allowInsecure": true,
+    "allowInsecureCiphers": false,
+    "disableSystemRoot": true
+        }
+      }
+    },
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "Direct"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "Proxy",
+        "ip": [
+          "0.0.0.0/0"
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## 未来计划
 

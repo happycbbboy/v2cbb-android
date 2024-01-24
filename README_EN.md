@@ -5,6 +5,62 @@ V2Ray client for Android, capable of implementing anonymous internet access, rem
 English | [简体中文](README_EN.md)
 
 
+## use
+
+Write [v2ray](https://v2ray.com/) config in the proxy configure,You only need to write outbound and route to the config configuration file
+```json
+{
+  "log": {
+    "loglevel": "debug"
+  },
+  "outbounds": [
+    {
+      "tag": "Proxy",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "xxxxxxxxxxx",
+            "port": 443,
+            "users": [
+              {
+                "id": "xxxxxx"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "127.0.0.1",
+          "allowInsecure": true,
+    "allowInsecureCiphers": false,
+    "disableSystemRoot": true
+        }
+      }
+    },
+    {
+      "protocol": "freedom",
+      "settings": {},
+      "tag": "Direct"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "Proxy",
+        "ip": [
+          "0.0.0.0/0"
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Features
 
 -Page optimization: The page configuration is more attractive and user-friendly
