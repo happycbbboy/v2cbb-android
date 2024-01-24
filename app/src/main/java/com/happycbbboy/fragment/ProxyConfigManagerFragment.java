@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.happycbbboy.R;
-import com.happycbbboy.databases.dao.ProxyConfigDao;
 import com.happycbbboy.databases.AppDatabase;
+import com.happycbbboy.databases.dao.ProxyConfigDao;
 import com.happycbbboy.domain.ProxyConfig;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -109,7 +109,13 @@ public class ProxyConfigManagerFragment extends Fragment {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT); // 将按钮放在右侧
+        params.addRule(RelativeLayout.CENTER_VERTICAL); // 将按钮垂直居中
+
         Toolbar layout = mainView.findViewById(R.id.toolbar);
+//        FrameLayout viewById = layout.findViewById(R.id.toolbarRight1Container);
+//        viewById.addView(btnSave, params);
         layout.addView(btnSave, params);
+
     }
 }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingLeft="24dp"
     android:paddingRight="24dp">
@@ -25,39 +24,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:textColor="?android:textColorPrimary" />
-<!--    <TextView
+
+    <!-- 容器 FrameLayout -->
+    <FrameLayout
+        android:id="@+id/toolbarRight1Container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="11dp"
-        android:layout_y="11dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end"
-        android:text="名字"
-        android:textSize="11sp" />-->
+        android:layout_centerVertical="true"/>
 
-    <!-- container1 -->
-    <RelativeLayout
-        android:id="@+id/container1"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end">
-    </RelativeLayout>
-
-<!--
-    <RelativeLayout
-        android:id="@+id/container2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="end">
-        </RelativeLayout>
--->
-
-
-</LinearLayout>
+</RelativeLayout>
