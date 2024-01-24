@@ -61,6 +61,9 @@
   }
 }
 ```
+## 下载
+
+[下载页面](https://github.com/happycbbboy/v2cbb-android/releases)
 
 ## 未来计划
 

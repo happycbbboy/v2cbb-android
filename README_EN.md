@@ -62,6 +62,10 @@ Write [v2ray](https://v2ray.com/) config in the proxy configure,You only need to
 }
 ```
 
+## Download
+
+[Download page](https://github.com/happycbbboy/v2cbb-android/releases)
+
 ## Features
 
 -Page optimization: The page configuration is more attractive and user-friendly
