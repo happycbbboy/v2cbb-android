@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TunVpnService extends VpnService {
-
     private static volatile TunVpnService INSTANCE;
 
     Thread thread;

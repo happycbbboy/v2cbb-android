@@ -1,10 +1,14 @@
 package com.happycbbboy;
 
-import static android.app.PendingIntent.getActivity;
-
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -16,16 +20,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.happycbbboy.common.NotifyManager;
 import com.happycbbboy.fragment.CenteredTextFragment;
 import com.happycbbboy.fragment.ProxyConfigFragment;
 import com.happycbbboy.userToolBar.menu.DrawerAdapter;
 import com.happycbbboy.userToolBar.menu.DrawerItem;
 import com.happycbbboy.userToolBar.menu.SimpleItem;
 import com.happycbbboy.userToolBar.menu.SpaceItem;
+import com.happycbbboy.vpn_lib.domain.Constants;
+import com.happycbbboy.vpn_lib.manager.Notify;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
@@ -47,9 +55,35 @@ public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnI
     private Drawable[] screenIcons;
 
     private SlidingRootNav slidingRootNav;
+    private BroadcastReceiver vpnSuccessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("onReceive1111111");
+            ;
+            Notify vpnParam = (Notify) intent.getExtras().get(Notify.PARAM_KEY);
+            if (vpnParam != null) {
+                showCustomDialog(vpnParam.getTitle(), vpnParam.getMsg());
+                if (!Objects.equals(vpnParam.getCode(), Notify.SUCCESS)) {
+                    Log.e("VPN_SERVICE", vpnParam.getError());
+                }
+            }
+        }
+    };
+
+    private void showCustomDialog(String title, String msg) {
+        NotifyManager.showAlertDialog(this, title, msg, (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        }, (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        });
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        IntentFilter filter = new IntentFilter(Notify.VPN_CONNECT_ACTION);
+        registerReceiver(vpnSuccessReceiver, filter);
+
 //        new ExceptionIntercepter(getApplication());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

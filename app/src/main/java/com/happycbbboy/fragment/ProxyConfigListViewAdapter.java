@@ -1,6 +1,7 @@
 package com.happycbbboy.fragment;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.happycbbboy.R;
-import com.happycbbboy.databases.dao.ProxyConfigDao;
+import com.happycbbboy.common.NotifyManager;
 import com.happycbbboy.databases.AppDatabase;
+import com.happycbbboy.databases.dao.ProxyConfigDao;
 import com.happycbbboy.domain.ProxyConfig;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ProxyConfigListViewAdapter extends BaseAdapter {
     private LayoutInflater mInflater;//得到一个LayoutInfalter对象用来导入布局
     private Application application;
+    private Context context;
     private FragmentActivity activity;
 
     List<ProxyConfig> proxyConfigArrayList = new ArrayList<>();
@@ -37,11 +40,11 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
     private final CompositeDisposable mDisposable = new CompositeDisposable();
     private AppCompatActivity mainView;
 
-    public ProxyConfigListViewAdapter(Application application,AppCompatActivity mainView, FragmentActivity activity, List<ProxyConfig> proxyConfigArrayList) {
-        this.application  = application;
+    public ProxyConfigListViewAdapter(Application application, Context context, AppCompatActivity mainView, FragmentActivity activity, List<ProxyConfig> proxyConfigArrayList) {
+        this.application = application;
         this.activity = activity;
         this.mainView = mainView;
-
+        this.context = context;
 
         this.mInflater = LayoutInflater.from(application);
         this.proxyConfigArrayList = proxyConfigArrayList;
@@ -87,23 +90,29 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, new ProxyConfigManagerFragment(application,mainView, proxyConfig.id));
+                fragmentTransaction.replace(R.id.container, new ProxyConfigManagerFragment(application, mainView, proxyConfig.id));
                 fragmentTransaction.commit();
             }
         });
         itermView.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDisposable.add(proxyConfigDao.delete(proxyConfig)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(() -> {
-                                    androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                    fragmentTransaction.replace(R.id.container, new ProxyConfigFragment(application, mainView,null));
-                                    fragmentTransaction.commit();
-                                },
-                                throwable -> Log.e("ProxyConfigManagerOnClick", "Unable to update username", throwable)));
+                NotifyManager.showAlertDialog(context, "CONFIG", "确定要删除当前配置吗?", (dialogInterface, i) -> {
+                    mDisposable.add(proxyConfigDao.delete(proxyConfig)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(() -> {
+                                        androidx.fragment.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                        fragmentTransaction.replace(R.id.container, new ProxyConfigFragment(application, mainView, null));
+                                        fragmentTransaction.commit();
+                                    },
+                                    throwable -> Log.e("ProxyConfigManagerOnClick", "Unable to update username", throwable)));
+
+                    dialogInterface.dismiss();
+                }, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
 
             }
         });

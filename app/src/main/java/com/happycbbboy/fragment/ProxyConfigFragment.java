@@ -16,8 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.happycbbboy.R;
-import com.happycbbboy.databases.dao.ProxyConfigDao;
+import com.happycbbboy.common.NotifyManager;
 import com.happycbbboy.databases.AppDatabase;
+import com.happycbbboy.databases.dao.ProxyConfigDao;
 import com.happycbbboy.domain.ProxyConfig;
 import com.happycbbboy.domain.VPNOptionsImp;
 import com.happycbbboy.vpn_lib.VPNInterface;
@@ -64,7 +65,7 @@ public class ProxyConfigFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                            proxyConfigListViewAdapter = new ProxyConfigListViewAdapter(application, mainView, getActivity(), list);
+                            proxyConfigListViewAdapter = new ProxyConfigListViewAdapter(application,requireContext(), mainView, getActivity(), list);
                             proxyConfigList.setAdapter(proxyConfigListViewAdapter);
                             proxyConfigList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
@@ -91,11 +92,21 @@ public class ProxyConfigFragment extends Fragment {
         start.setOnClickListener(view1 -> {
             if (currentId == null) {
                 Log.e("START_VPN", "未选择代理配置");
+                NotifyManager.showAlertDialog( requireContext(),"START_VPN","未选择代理配置", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                }, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
                 return;
             }
             ProxyConfig proxyConfig = proxyConfigListViewAdapter.proxyConfigArrayList.get(currentId);
             if (proxyConfig == null) {
                 Log.e("START_VPN", "未选择代理配置");
+                NotifyManager.showAlertDialog( requireContext(),"START_VPN","未查询到代理配置", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                }, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
                 return;
             }
             mDisposable.add(proxyConfigDao.findById(proxyConfig.id)
@@ -104,6 +115,11 @@ public class ProxyConfigFragment extends Fragment {
                     .subscribe(proxyConf -> {
                                 if (proxyConf == null) {
                                     Log.e("START_VPN", "未选择代理配置");
+                                    NotifyManager.showAlertDialog( requireContext(),"START_VPN","未选择代理配置", (dialogInterface, i) -> {
+                                        dialogInterface.dismiss();
+                                    }, (dialogInterface, i) -> {
+                                        dialogInterface.dismiss();
+                                    });
                                     return;
                                 }
                                 VPNOptionsImp vpnOptionsImp = new VPNOptionsImp();

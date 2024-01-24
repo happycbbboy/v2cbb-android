@@ -1,5 +1,5 @@
 # v2cbb-android
-V2Ray client for Android, capable of implementing anonymous internet access, remote access, and other solutions
+V2Ray client for Android, capable of implementing anonymous internet access, remote access, VPN, and other solutions
 
 ![256](./assets/256.png)
 
@@ -77,6 +77,10 @@ Write [v2ray](https://v2ray.com/) config in the proxy configure,You only need to
 -IOS support
 -Macos support
 -Windows support
+
+## Disclaimers
+
+Please comply with local laws and regulations when using this program. Misuse and malicious use are prohibited, and any problems caused by violating the law will be borne by the user.
 
 ## cooperation
 

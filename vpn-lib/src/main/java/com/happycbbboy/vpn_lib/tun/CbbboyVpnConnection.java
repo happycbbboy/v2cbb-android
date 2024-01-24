@@ -18,11 +18,12 @@ package com.happycbbboy.vpn_lib.tun;
 
 
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 
-
 import com.happycbbboy.vpn_lib.VPNOptions;
+import com.happycbbboy.vpn_lib.manager.Notify;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,7 +37,7 @@ public class CbbboyVpnConnection implements Runnable {
     private static volatile CbbboyVpnConnection INSTANCE;
     private VPNOptions options;
 
-    public static CbbboyVpnConnection getInstance(VpnService service, VPNOptions param) {
+    public static CbbboyVpnConnection getInstance( VpnService service, VPNOptions param) {
         if (INSTANCE == null) {
             synchronized (TunVpnService.class) {
                 if (INSTANCE == null) {
@@ -63,7 +64,7 @@ public class CbbboyVpnConnection implements Runnable {
     private static final int MAX_PACKET_SIZE = Short.MAX_VALUE;
 
 
-    private final VpnService mService;
+    private VpnService vpnService;
 
     ParcelFileDescriptor iface = null;
     FileOutputStream out = null;
@@ -72,9 +73,8 @@ public class CbbboyVpnConnection implements Runnable {
 
 
     // Allowed/Disallowed packages for VPN usage
-
-    public CbbboyVpnConnection(final VpnService service) {
-        mService = service;
+    public CbbboyVpnConnection( final VpnService service) {
+        this.vpnService = service;
     }
 
     /**
@@ -134,7 +134,7 @@ public class CbbboyVpnConnection implements Runnable {
 
                     @Override
                     public boolean protect(long l) {
-                        return mService.protect((int) l);
+                        return vpnService.protect((int) l);
                     }
                 };
 
@@ -143,6 +143,10 @@ public class CbbboyVpnConnection implements Runnable {
                 iface = configure();
                 FileInputStream in = new FileInputStream(iface.getFileDescriptor());
                 out = new FileOutputStream(iface.getFileDescriptor());
+
+                Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                vpnSuccessIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.SUCCESS,"VPN_SERVICE","vpn 启动成功"));
+                vpnService.sendBroadcast(vpnSuccessIntent);
 
                 ByteBuffer packet = ByteBuffer.allocate(MAX_PACKET_SIZE);
                 while (true) {
@@ -154,7 +158,9 @@ public class CbbboyVpnConnection implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                vpnSuccessIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.ERROR,"VPN_SERVICE",e.getMessage(), e.getMessage()));
+                vpnService.sendBroadcast(vpnSuccessIntent);
             } finally {
                 if (iface != null) {
                     try {
@@ -172,7 +178,7 @@ public class CbbboyVpnConnection implements Runnable {
 
     private ParcelFileDescriptor configure() throws IllegalArgumentException {
         // 配置路由
-        VpnService.Builder builder = mService.new Builder();
+        VpnService.Builder builder = vpnService.new Builder();
         builder.setMtu(1500);
         builder.addRoute("0.0.0.0", 0);
         builder.addAddress("10.0.0.1", 32);
@@ -183,7 +189,7 @@ public class CbbboyVpnConnection implements Runnable {
 
         // Create a new interface using the builder and save the parameters.
         final ParcelFileDescriptor vpnInterface;
-        synchronized (mService) {
+        synchronized (vpnService) {
             vpnInterface = builder.establish();
             if (mOnEstablishListener != null) {
                 mOnEstablishListener.onEstablish(vpnInterface);
