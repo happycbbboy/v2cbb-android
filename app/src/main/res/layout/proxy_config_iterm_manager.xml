@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.ProxyConfListItermManagerFrame">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_x="11dp"
+            android:layout_y="11dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="名字"
+            android:textSize="11sp" />
+
+        <EditText
+            android:id="@+id/ProxyConfigName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="-10dp"
+            android:layout_x="29dp"
+            android:layout_y="33dp"
+            android:hint="name"
+            android:inputType="text"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_x="11dp"
+            android:layout_y="11dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="代理配置"
+            android:textSize="11sp" />
+
+        <EditText
+            android:id="@+id/ProxyConfigJson"
+            android:layout_width="fill_parent"
+            android:layout_height="360dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="15dp"
+            android:layout_x="29dp"
+            android:layout_y="33dp"
+            android:gravity="top"
+            android:hint="proxy-conf"
+            android:inputType="textMultiLine"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

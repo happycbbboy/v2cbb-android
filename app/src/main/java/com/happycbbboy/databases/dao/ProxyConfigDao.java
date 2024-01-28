@@ -9,6 +9,7 @@ import androidx.room.Query;
 import com.happycbbboy.domain.ProxyConfig;
 
 import java.util.List;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 

@@ -17,20 +17,11 @@
 package com.happycbbboy.vpn_lib.tun;
 
 
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.VpnService;
-import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.util.Pair;
-
-import androidx.core.app.NotificationCompat;
 
 import com.happycbbboy.vpn_lib.VPNOptions;
 import com.happycbbboy.vpn_lib.domain.Constants;
@@ -47,8 +38,6 @@ public class TunVpnService extends VpnService {
     private final AtomicReference<Thread> mConnectingThread = new AtomicReference<>();
 
     private final AtomicReference<Connection> mConnection = new AtomicReference<>();
-
-    private StopServiceReceiver receiver = new StopServiceReceiver();
 
     public static TunVpnService getInstance() {
         if (INSTANCE == null) {
@@ -68,18 +57,9 @@ public class TunVpnService extends VpnService {
     }
 
 
-    class StopServiceReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopVpn();
-        }
-    }
-
     @Override
     public void onCreate() {
-        IntentFilter filter = new IntentFilter("com.cbbboy-vpn");
-        registerReceiver(receiver, filter);
-        showNotification();
+        super.onCreate();
     }
 
     @Override
@@ -109,8 +89,6 @@ public class TunVpnService extends VpnService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        unregisterReceiver(receiver);
         stopVpn();
     }
 
@@ -145,33 +123,11 @@ public class TunVpnService extends VpnService {
     private void stopVpn() {
         closeThread();
         setConnection(null);
-        cancelNotification();
-//        SDKController.setIsCloseVPN(true);
+        this.stopForeground(true);
         stopSelf();
     }
 
 
-    private void cancelNotification() {
-        this.stopForeground(true);
-    }
 
-
-    private void showNotification() {
-        String channelId = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            channelId = "cbbboy id";
-            String channelName = "CBBboy VPN Background Service";
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_NONE);
-            channel.setLightColor(Color.DKGRAY);
-            channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-            if (notificationManager == null) {
-                notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            }
-            notificationManager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
-        builder.setContentText("cbbboy vpn").setPriority(NotificationCompat.PRIORITY_MIN).setOngoing(true).setShowWhen(false).setOnlyAlertOnce(true);
-        this.startForeground(1, builder.build());
-    }
 
 }

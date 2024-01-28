@@ -1,6 +1,16 @@
 <resources>
-    <string name="app_name">cbbboy</string>
-    <string name="account_balance">Account Balance</string>
-    <string name="balance_currency">$</string>
-    <string name="balance_amount">524.99</string>
+    <string name="app_name">v2cbb</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">v2cbb-android</string>
+    <string name="nav_header_subtitle">happycbbboy@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="new_proxy_settings">新增代理配置</string>
+    <string name="new_route_settings">新增路由配置</string>
+
+    <string name="menu_home">代理配置</string>
+    <string name="menu_gallery">路由配置</string>
+    <string name="support_me">支持我们</string>
+    <string name="cooperation">合作</string>
 </resources>

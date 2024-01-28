@@ -1,171 +1,166 @@
 package com.happycbbboy;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import com.happycbbboy.common.NotifyManager;
-import com.happycbbboy.fragment.CenteredTextFragment;
-import com.happycbbboy.fragment.ProxyConfigFragment;
-import com.happycbbboy.userToolBar.menu.DrawerAdapter;
-import com.happycbbboy.userToolBar.menu.DrawerItem;
-import com.happycbbboy.userToolBar.menu.SimpleItem;
-import com.happycbbboy.userToolBar.menu.SpaceItem;
-import com.happycbbboy.vpn_lib.domain.Constants;
+import com.google.android.material.navigation.NavigationView;
+import com.happycbbboy.databinding.ActivityMainBinding;
+import com.happycbbboy.domain.EventBusConstant;
+import com.happycbbboy.domain.EventBusMsg;
+import com.happycbbboy.manager.message.BroadCastReceiverImpl;
+import com.happycbbboy.ui.home.ProxyConfListItermManagerFrame;
 import com.happycbbboy.vpn_lib.manager.Notify;
-import com.yarolegovich.slidingrootnav.SlidingRootNav;
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.logging.Logger;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class MainActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
-    private Logger log = Logger.getLogger("MainActivity");
-//
-//    // 所有页面配置
-//    private Fragment[] fragmentList;
+public class MainActivity extends AppCompatActivity {
 
+    private AppBarConfiguration mAppBarConfiguration;
+    private ActivityMainBinding binding;
+    private Menu menu;
 
-    private static final int SELECT_PROXY_CONF = 0;
-    private static final int PROXY_CONF = 1;
-    private static final int POS_MESSAGES = 2;
-    private static final int POS_CART = 3;
-    private static final int POS_LOGOUT = 5;
-
-    // 左菜单栏名字
-    private String[] screenTitles;
-    // 左菜单栏icon
-    private Drawable[] screenIcons;
-
-    private SlidingRootNav slidingRootNav;
-    private BroadcastReceiver vpnSuccessReceiver = new BroadcastReceiver() {
+/*    private final BroadcastReceiver vpnSuccessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Notify vpnParam = (Notify) intent.getExtras().get(Notify.PARAM_KEY);
             if (vpnParam != null) {
-                showCustomDialog(vpnParam.getTitle(), vpnParam.getMsg());
+                Toast.makeText(MainActivity.this, vpnParam.getTitle() + ":" + vpnParam.getMsg(), Toast.LENGTH_SHORT).show();
                 if (!Objects.equals(vpnParam.getCode(), Notify.SUCCESS)) {
                     Log.e("VPN_SERVICE", vpnParam.getError());
                 }
             }
         }
-    };
-
-    private void showCustomDialog(String title, String msg) {
-        NotifyManager.showAlertDialog(this, title, msg, (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        }, (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
-    }
+    };*/
 
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        IntentFilter filter = new IntentFilter(Notify.VPN_CONNECT_ACTION);
-        registerReceiver(vpnSuccessReceiver, filter);
-
-//        new ExceptionIntercepter(getApplication());
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        BroadCastReceiverImpl broadCastReceiver = new BroadCastReceiverImpl(MainActivity.this);
+        registerReceiver(broadCastReceiver, new IntentFilter(Notify.VPN_CONNECT_ACTION), Context.RECEIVER_EXPORTED);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        slidingRootNav = new SlidingRootNavBuilder(this).withToolbarMenuToggle(toolbar).withMenuOpened(false).withContentClickableWhenMenuOpened(false).withSavedState(savedInstanceState).withMenuLayout(R.layout.menu_left_drawer).inject();
+        setSupportActionBar(binding.appBarMain.toolbar);
 
-        screenIcons = loadScreenIcons();
-        screenTitles = loadScreenTitles();
-//        fragmentList = new Fragment[POS_LOGOUT];
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                .setOpenableLayout(drawer)
+                .build();
 
-        DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(createItemFor(SELECT_PROXY_CONF).setChecked(true), createItemFor(PROXY_CONF), createItemFor(POS_MESSAGES), createItemFor(POS_CART), new SpaceItem(48), createItemFor(POS_LOGOUT)));
-        adapter.setListener(this);
 
-        RecyclerView list = findViewById(R.id.toolbarList);
-        list.setNestedScrollingEnabled(false);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+    }
 
-        adapter.setSelected(SELECT_PROXY_CONF);
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
+        return true;
     }
 
     @Override
-    public void onItemSelected(int position) {
-        Fragment selectedScreen = null;
-        switch (position) {
-            case POS_LOGOUT:
-                finish();
-                break;
-            case SELECT_PROXY_CONF:
-
-                selectedScreen = new ProxyConfigFragment(getApplication(), this, null);
-//                selectedScreen = new ProxyConfigManagerFragment(getApplication());
-                break;
-//            case SELECT_PROXY_CONF:
-//                selectedScreen = new ProxyConfigManagerFragment(getApplication());
-//                break;
-            case PROXY_CONF:
-                selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
-                break;
-            case POS_MESSAGES:
-                selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
-                break;
-            case POS_CART:
-                selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
-                break;
-            default:
-                log.info("onItemSelected positions:" + position);
-                return;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // 处理选项菜单项的点击事件
+        int itemId = item.getItemId();
+        if (itemId == R.id.new_proxy_settings) {
+            OpenNewProxySettings(null);
+            return true;
+        } else if (itemId == R.id.new_route_settings) {
+            return true;
         }
-        slidingRootNav.closeMenu();
-        showFragment(selectedScreen);
+        return super.onOptionsItemSelected(item);
     }
 
-    private void showFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-    }
+    private void OpenNewProxySettings(Integer i) {
 
-    @SuppressWarnings("rawtypes")
-    private DrawerItem createItemFor(int position) {
-        return new SimpleItem(screenIcons[position], screenTitles[position]).withIconTint(color(R.color.textColorSecondary)).withTextTint(color(R.color.textColorPrimary)).withSelectedIconTint(color(R.color.colorAccent)).withSelectedTextTint(color(R.color.colorAccent));
-    }
+        Bundle bundle = new Bundle();
+        if (i != null) {
+            bundle.putInt("id", i);
+        }
+        ProxyConfListItermManagerFrame fragment = new ProxyConfListItermManagerFrame();
+        fragment.setArguments(bundle);
+        // 导航到目标 Fragment
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 
-    private String[] loadScreenTitles() {
-        return getResources().getStringArray(R.array.ld_activityScreenTitles);
-    }
+        navController.addOnDestinationChangedListener((navController1, navDestination, bundle1) -> {
+            int currentDestinationId = navDestination.getId();
+            // 检查是否是回退按钮触发的
+            if (currentDestinationId == R.id.nav_home) {
+                menu.clear();
+                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
 
-    private Drawable[] loadScreenIcons() {
-        TypedArray ta = getResources().obtainTypedArray(R.array.ld_activityScreenIcons);
-        Drawable[] icons = new Drawable[ta.length()];
-        for (int i = 0; i < ta.length(); i++) {
-            int id = ta.getResourceId(i, 0);
-            if (id != 0) {
-                icons[i] = ContextCompat.getDrawable(this, id);
+            } else if (currentDestinationId == R.id.proxy_config_iterm_manager_fragment){
+                // 启动新的Activity
+                menu.clear();
+                //添加标题栏的确定按钮
+                MenuItem submit = menu.add(0, 0, 0, "");
+                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
+                submit.setOnMenuItemClickListener(menuItem -> {
+                    EventBus.getDefault().post(EventBusMsg.SUBMIT);
+                    return true;
+                });
+                submit.setIcon(R.mipmap.submit_config);//设置图标
+
+            }else {
+                menu.clear();
+                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
             }
-        }
-        ta.recycle();
-        return icons;
+        });
+        navController.navigate(R.id.save_proxy_config_iterm_manager_fragment, bundle);
     }
 
-    @ColorInt
-    private int color(@ColorRes int res) {
-        return ContextCompat.getColor(this, res);
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void MainActivityListener(EventBusConstant event) {
+        EventBusMsg eventBusMsg = event.getEventBusMsg();
+        switch (eventBusMsg) {
+            case OPEN_PROXY_CONFIG:
+                OpenNewProxySettings(event.getId());
+            default:
+                break;
+        }
     }
 }

@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.happycbbboy.vpn_lib.VPNOptions;
 import com.happycbbboy.vpn_lib.domain.Constants;
+import com.happycbbboy.vpn_lib.manager.Notify;
 
 
 public class TunActivity extends Activity {
@@ -34,12 +32,16 @@ public class TunActivity extends Activity {
         if (requestCode == 199) {
             if (resultCode == -1) {
                 startTunnel((VPNOptions)getIntent().getExtras().get(Constants.CONFIG));
+            }else {
+                Intent vpnErrIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                vpnErrIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.ERROR,"VPN_SERVICE","监测到未授权vpn权限,请授权vpn权限后再次尝试","授权vpn权限"));
+                sendBroadcast(vpnErrIntent);
             }
         }
         finish();
     }
 
-    private void initWindow() {
+/*    private void initWindow() {
         Window window = getWindow();
         window.setGravity(Gravity.START | Gravity.TOP);
         WindowManager.LayoutParams layoutParams = window.getAttributes();
@@ -48,7 +50,7 @@ public class TunActivity extends Activity {
         layoutParams.height = 1;
         layoutParams.width = 1;
         window.setAttributes(layoutParams);
-    }
+    }*/
 
     private void startTunnel(VPNOptions config) {
         Intent intent = new Intent(this, TunVpnService.class);
