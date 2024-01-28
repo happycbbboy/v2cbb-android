@@ -76,12 +76,13 @@ public class ProxyConfListFrame extends Fragment {
                                         Toast.makeText(requireContext(), "代理配置为空", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
-                                    VPNOptionsImp vpnOptionsImp = new VPNOptionsImp() ;
+                                    VPNOptionsImp vpnOptionsImp = new VPNOptionsImp();
                                     vpnOptionsImp.setProxyConf(proxyConf.getProxyConf());
                                     vpnOptionsImp.setRoute(proxyConf.getRoute());
                                     vpnOptionsImp.setExcludePackage(proxyConf.getExcludePackage());
                                     vpnOptionsImp.setIncludePackage(proxyConf.getIncludePackage());
                                     VPNInterface.Start(getActivity().getApplication(), vpnOptionsImp);
+//                                    ((FloatingActionButton) binding.fab).setImageDrawable(AppCompatResources.getDrawable(requireContext(), android.R.drawable.ic_media_pause));
                                 },
                                 throwable -> {
                                     Log.e("onViewCreated", "proxyConfigDao get all:", throwable);

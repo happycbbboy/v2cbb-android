@@ -34,7 +34,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="@android:color/white"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        app:useCompatPadding="true" />
+        app:srcCompat="@android:drawable/ic_media_play"
+        app:useCompatPadding="true"
+        app:maxImageSize="30dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

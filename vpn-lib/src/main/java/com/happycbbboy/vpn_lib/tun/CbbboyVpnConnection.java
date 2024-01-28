@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 import com.happycbbboy.vpn_lib.VPNOptions;
 import com.happycbbboy.vpn_lib.manager.Notify;
@@ -29,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import sdk.Param;
 import sdk.Sdk;
@@ -37,7 +39,7 @@ public class CbbboyVpnConnection implements Runnable {
     private static volatile CbbboyVpnConnection INSTANCE;
     private VPNOptions options;
 
-    public static CbbboyVpnConnection getInstance( VpnService service, VPNOptions param) {
+    public static CbbboyVpnConnection getInstance(VpnService service, VPNOptions param) {
         if (INSTANCE == null) {
             synchronized (TunVpnService.class) {
                 if (INSTANCE == null) {
@@ -73,7 +75,7 @@ public class CbbboyVpnConnection implements Runnable {
 
 
     // Allowed/Disallowed packages for VPN usage
-    public CbbboyVpnConnection( final VpnService service) {
+    public CbbboyVpnConnection(final VpnService service) {
         this.vpnService = service;
     }
 
@@ -145,7 +147,7 @@ public class CbbboyVpnConnection implements Runnable {
                 out = new FileOutputStream(iface.getFileDescriptor());
 
                 Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
-                vpnSuccessIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.SUCCESS,"VPN_SERVICE","vpn 启动成功"));
+                vpnSuccessIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.SUCCESS, "VPN_SERVICE", "vpn 启动成功"));
                 vpnService.sendBroadcast(vpnSuccessIntent);
 
                 ByteBuffer packet = ByteBuffer.allocate(MAX_PACKET_SIZE);
@@ -157,9 +159,11 @@ public class CbbboyVpnConnection implements Runnable {
                         packet.clear();
                     }
                 }
+            } catch (IOException e) {
+                Log.e("VPN_SERVICE", Objects.requireNonNull(e.getMessage()));
             } catch (Exception e) {
                 Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
-                vpnSuccessIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.ERROR,"VPN_SERVICE",e.getMessage(), e.getMessage()));
+                vpnSuccessIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.ERROR, "VPN_SERVICE", e.getMessage(), e.getMessage()));
                 vpnService.sendBroadcast(vpnSuccessIntent);
             } finally {
                 if (iface != null) {
