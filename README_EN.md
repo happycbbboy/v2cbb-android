@@ -84,9 +84,7 @@ Please comply with local laws and regulations when using this program. Misuse an
 
 ## cooperation
 
-If you have any questions related to VPN, we can help you answer them. Similarly, we can also provide you with VPN SDK, including customized and standard versions
-
-Including standard protocol tunnels, custom encryption tunnels, and other solutions, you can use happycbbboy@gmail.com Contact us via email
+you can use happycbbboy@gmail.com Contact us via email
 
 ## support
 
