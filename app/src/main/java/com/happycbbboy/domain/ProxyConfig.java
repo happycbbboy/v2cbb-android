@@ -7,24 +7,17 @@ import androidx.room.TypeConverters;
 
 import com.happycbbboy.domain.adapter.ChatItemConverter;
 
-import java.util.List;
-
 @Entity
 @TypeConverters(ChatItemConverter.class)
 public class ProxyConfig {
     @PrimaryKey(autoGenerate = true)
-    public Integer id;
+    Integer id;
     @ColumnInfo(name = "name")
     String name;
     @ColumnInfo(name = "proxy_conf")
     String proxyConf;
     @ColumnInfo(name = "route")
-    List<String> route;
-
-    @ColumnInfo(name = "include_package")
-    List<String> includePackage;
-    @ColumnInfo(name = "exclude_package")
-    List<String> excludePackage;
+    Integer routeProxyId;
 
     public Integer getId() {
         return id;
@@ -50,27 +43,11 @@ public class ProxyConfig {
         this.proxyConf = proxyConf;
     }
 
-    public List<String> getRoute() {
-        return route;
+    public Integer getRouteProxyId() {
+        return routeProxyId;
     }
 
-    public void setRoute(List<String> route) {
-        this.route = route;
-    }
-
-    public List<String> getIncludePackage() {
-        return includePackage;
-    }
-
-    public void setIncludePackage(List<String> includePackage) {
-        this.includePackage = includePackage;
-    }
-
-    public List<String> getExcludePackage() {
-        return excludePackage;
-    }
-
-    public void setExcludePackage(List<String> excludePackage) {
-        this.excludePackage = excludePackage;
+    public void setRouteProxyId(Integer routeProxyId) {
+        this.routeProxyId = routeProxyId;
     }
 }

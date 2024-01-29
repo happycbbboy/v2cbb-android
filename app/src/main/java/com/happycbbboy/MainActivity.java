@@ -21,11 +21,14 @@ import com.happycbbboy.domain.EventBusConstant;
 import com.happycbbboy.domain.EventBusMsg;
 import com.happycbbboy.manager.message.BroadCastReceiverImpl;
 import com.happycbbboy.ui.home.ProxyConfListItermManagerFrame;
+import com.happycbbboy.utils.AppUtils;
 import com.happycbbboy.vpn_lib.manager.Notify;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         BroadCastReceiverImpl broadCastReceiver = new BroadCastReceiverImpl(MainActivity.this);
         registerReceiver(broadCastReceiver, new IntentFilter(Notify.VPN_CONNECT_ACTION), Context.RECEIVER_EXPORTED);
-
+        List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(this);
+        for (AppUtils.AppInfo allInstalledApp : allInstalledApps) {
+            System.out.println( allInstalledApp.getAppName()+"------>"+allInstalledApp.getPackageName());
+        }
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

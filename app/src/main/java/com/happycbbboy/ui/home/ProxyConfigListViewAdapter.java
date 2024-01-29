@@ -82,7 +82,7 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
         itermView.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusConstant(EventBusMsg.OPEN_PROXY_CONFIG,proxyConfig.id));
+                EventBus.getDefault().post(new EventBusConstant(EventBusMsg.OPEN_PROXY_CONFIG,proxyConfig.getId()));
             }
         });
         itermView.delete.setOnClickListener(new View.OnClickListener() {

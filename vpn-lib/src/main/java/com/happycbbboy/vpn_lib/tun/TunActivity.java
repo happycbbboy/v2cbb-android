@@ -20,8 +20,8 @@ public class TunActivity extends Activity {
 //        initWindow();
         if (intent != null) {
             startActivityForResult(intent, 199);
-        }else {
-            startTunnel((VPNOptions)getIntent().getExtras().get(Constants.CONFIG));
+        } else {
+            startTunnel((VPNOptions) getIntent().getExtras().get(Constants.CONFIG));
             finish();
         }
     }
@@ -31,10 +31,10 @@ public class TunActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 199) {
             if (resultCode == -1) {
-                startTunnel((VPNOptions)getIntent().getExtras().get(Constants.CONFIG));
-            }else {
+                startTunnel((VPNOptions) getIntent().getExtras().get(Constants.CONFIG));
+            } else {
                 Intent vpnErrIntent = new Intent(Notify.VPN_CONNECT_ACTION);
-                vpnErrIntent.putExtra(Notify.PARAM_KEY,new Notify(Notify.ERROR,"VPN_SERVICE","监测到未授权vpn权限,请授权vpn权限后再次尝试","授权vpn权限"));
+                vpnErrIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.ERROR, "VPN_SERVICE", "监测到未授权vpn权限,请授权vpn权限后再次尝试", "授权vpn权限"));
                 sendBroadcast(vpnErrIntent);
             }
         }

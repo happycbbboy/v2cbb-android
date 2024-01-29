@@ -10,8 +10,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.happycbbboy.R;
 import com.happycbbboy.databases.AppDatabase;
 import com.happycbbboy.databases.dao.ProxyConfigDao;
 import com.happycbbboy.databinding.ProxyConfigItermListBinding;
@@ -42,7 +44,6 @@ public class ProxyConfListFrame extends Fragment {
 
         ListView proxyConfList = binding.proxyConfList;
 
-
         mDisposable.add(proxyConfigDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,10 +52,24 @@ public class ProxyConfListFrame extends Fragment {
                             proxyConfList.setAdapter(proxyConfigListViewAdapter);
                             proxyConfList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                                    currentId = list.get(arg2).id;
+                                public void onItemClick(AdapterView<?> parent, View view, int arg2, long arg3) {
+                                    currentId = list.get(arg2).getId();
                                     proxyConfList.setItemChecked(arg2, true);
+//                                    proxyConfigListViewAdapter.getItem(arg2)
+                                    // Reset the background color of all items
+                                    for (int i = 0; i < parent.getChildCount(); i++) {
+                                        View listItem = parent.getChildAt(i);
+                                        if (listItem instanceof CardView) {
+                                            ((CardView) listItem).setCardBackgroundColor(getResources().getColor(R.color.card_default_color,null));
+                                        }
+                                    }
+
+                                    // Highlight the selected item
+                                    if (view instanceof CardView) {
+                                        ((CardView) view).setCardBackgroundColor(getResources().getColor(R.color.md_teal_500,null)); // Set your desired highlight color
+                                    }
                                 }
+
                             });
                         },
                         throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
@@ -78,9 +93,9 @@ public class ProxyConfListFrame extends Fragment {
                                     }
                                     VPNOptionsImp vpnOptionsImp = new VPNOptionsImp();
                                     vpnOptionsImp.setProxyConf(proxyConf.getProxyConf());
-                                    vpnOptionsImp.setRoute(proxyConf.getRoute());
-                                    vpnOptionsImp.setExcludePackage(proxyConf.getExcludePackage());
-                                    vpnOptionsImp.setIncludePackage(proxyConf.getIncludePackage());
+//                                    vpnOptionsImp.setRoute(proxyConf.getRoute());
+//                                    vpnOptionsImp.setExcludePackage(proxyConf.getExcludePackage());
+//                                    vpnOptionsImp.setIncludePackage(proxyConf.getIncludePackage());
                                     VPNInterface.Start(getActivity().getApplication(), vpnOptionsImp);
 //                                    ((FloatingActionButton) binding.fab).setImageDrawable(AppCompatResources.getDrawable(requireContext(), android.R.drawable.ic_media_pause));
                                 },

@@ -24,6 +24,7 @@
     <color name="md_cyan_A400">#00E5FF</color>
     <color name="md_cyan_A700">#00B8D4</color>
 
+    <color name="card_default_color">#F2F0F4</color>
     <!-- teal -->
     <color name="md_teal_50">#E0F2F1</color>
     <color name="md_teal_100">#B2DFDB</color>

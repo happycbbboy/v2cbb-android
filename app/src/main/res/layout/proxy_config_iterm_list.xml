@@ -11,7 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
-        android:listSelector="@color/md_cyan_400" />
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+    <!--    android:listSelector="@color/md_teal_500"-->
     <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
@@ -33,9 +40,9 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="30dp"
         app:rippleColor="@android:color/white"
         app:srcCompat="@android:drawable/ic_media_play"
-        app:useCompatPadding="true"
-        app:maxImageSize="30dp" />
+        app:useCompatPadding="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

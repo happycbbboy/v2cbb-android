@@ -26,9 +26,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.happycbbboy.ui.gallery.GalleryFragment"
+        android:name="com.happycbbboy.ui.route.RouteConfListFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery"
+        tools:layout="@layout/fragment_route_conf_list"
         android:layout_weight="200"/>
 
     <fragment
