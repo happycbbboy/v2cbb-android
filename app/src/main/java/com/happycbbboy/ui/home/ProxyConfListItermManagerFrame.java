@@ -98,7 +98,7 @@ public class ProxyConfListItermManagerFrame extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void FragmentButtonClicked(EventBusMsg event) {
         switch (event) {
-            case SUBMIT:
+            case PROXY_SETTING_SUBMIT:
                 ProxyConfig proxyConfig = new ProxyConfig();
                 proxyConfig.setId(Id);
                 proxyConfig.setName(name.getText().toString());

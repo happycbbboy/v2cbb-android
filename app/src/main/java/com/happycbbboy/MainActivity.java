@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.route_config_home, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -127,11 +127,24 @@ public class MainActivity extends AppCompatActivity {
                 MenuItem submit = menu.add(0, 0, 0, "");
                 submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
                 submit.setOnMenuItemClickListener(menuItem -> {
-                    EventBus.getDefault().post(EventBusMsg.SUBMIT);
+                    EventBus.getDefault().post(EventBusMsg.PROXY_SETTING_SUBMIT);
                     return true;
                 });
                 submit.setIcon(R.mipmap.submit_config);//设置图标
-
+            } else if (currentDestinationId == R.id.route_config_home){
+                menu.clear();
+                getMenuInflater().inflate(R.menu.route_proxy_menu, menu);
+            } else if (currentDestinationId == R.id.proxy_config_iterm_manager_fragment){
+                // 启动新的Activity
+                menu.clear();
+                //添加标题栏的确定按钮
+                MenuItem submit = menu.add(0, 0, 0, "");
+                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
+                submit.setOnMenuItemClickListener(menuItem -> {
+                    EventBus.getDefault().post(EventBusMsg.ROUTE_SETTING_SUBMIT);
+                    return true;
+                });
+                submit.setIcon(R.mipmap.submit_config);//设置图标
             }else {
                 menu.clear();
                 getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);

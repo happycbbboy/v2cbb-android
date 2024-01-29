@@ -14,7 +14,6 @@
         <action
             android:id="@+id/save_proxy_config_iterm_manager_fragment"
             app:destination="@id/proxy_config_iterm_manager_fragment" />
-
     </fragment>
     <fragment
         android:id="@+id/proxy_config_iterm_manager_fragment"
@@ -25,7 +24,7 @@
 
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/route_config_home"
         android:name="com.happycbbboy.ui.route.RouteConfListFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_route_conf_list"
@@ -37,6 +36,7 @@
         android:label="@string/support_me"
         tools:layout="@layout/fragment_slideshow"
         android:layout_weight="300"/>
+
     <fragment
         android:id="@+id/nav_cooperation"
         android:name="com.happycbbboy.ui.slideshow.SlideshowFragment"
