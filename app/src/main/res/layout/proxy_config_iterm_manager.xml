@@ -29,16 +29,15 @@
 
         <EditText
             android:id="@+id/ProxyConfigName"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="-10dp"
-            android:layout_x="29dp"
-            android:layout_y="33dp"
             android:hint="name"
             android:inputType="text"
-            android:textSize="24sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,8 +45,6 @@
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
-            android:layout_x="11dp"
-            android:layout_y="11dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="代理配置"
@@ -59,14 +56,12 @@
             android:layout_height="360dp"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="-10dp"
             android:layout_marginRight="15dp"
-            android:layout_x="29dp"
-            android:layout_y="33dp"
+            android:layout_marginTop="-10dp"
             android:gravity="top"
             android:hint="proxy-conf"
             android:inputType="textMultiLine"
-            android:textSize="24sp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 

@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.happycbbboy.R;
 import com.happycbbboy.databases.AppDatabase;
 import com.happycbbboy.databases.dao.ProxyConfigDao;
-import com.happycbbboy.databinding.ProxyConfigItermListBinding;
 import com.happycbbboy.domain.EventBusConstant;
 import com.happycbbboy.domain.EventBusMsg;
 import com.happycbbboy.domain.ProxyConfig;
@@ -35,7 +34,6 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
     // dao
     private ProxyConfigDao proxyConfigDao = null;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
-    private ProxyConfigItermListBinding binding;
 
 
     public ProxyConfigListViewAdapter(Application application, List<ProxyConfig> proxyConfigArrayList) {

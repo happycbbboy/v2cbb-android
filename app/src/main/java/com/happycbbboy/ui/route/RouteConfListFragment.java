@@ -45,8 +45,8 @@ public class RouteConfListFragment extends Fragment {
         item.setName("tes");
         PlaceholderContent.addItem(item);
         RouteConfig item2 = new RouteConfig();
-        item2.setId(1);
-        item2.setName("tes");
+        item2.setId(12);
+        item2.setName("tes1");
         PlaceholderContent.addItem(item2);
 
         mDisposable.add(routeConfigDao.getAll()
@@ -59,22 +59,6 @@ public class RouteConfListFragment extends Fragment {
                             root.setAdapter(new RouteConfigItermRecyclerViewAdapter(PlaceholderContent.ITEMS));
                         },
                         throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
-
-
-/*//        View viewById = root.findViewById(R.layout.fragment_route_conf_iterm);
-//        View view = inflater.inflate(R.layout.fragment_route_conf_iterm, container, false);
-
-        // Set the adapter
-        if (root instanceof RecyclerView) {
-//            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) root;
-*//*            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }*//*
-            recyclerView.setAdapter(new RouteConfigItermRecyclerViewAdapter(PlaceholderContent.ITEMS));
-        }*/
         return root;
     }
 }

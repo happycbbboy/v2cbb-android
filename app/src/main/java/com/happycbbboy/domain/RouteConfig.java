@@ -13,7 +13,6 @@ import java.util.List;
 @TypeConverters(ChatItemConverter.class)
 public class RouteConfig {
 
-
     @PrimaryKey(autoGenerate = true)
     Integer id;
     @ColumnInfo(name = "name")

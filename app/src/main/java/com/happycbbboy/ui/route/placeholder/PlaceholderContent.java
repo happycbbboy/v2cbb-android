@@ -28,8 +28,6 @@ public class PlaceholderContent {
         RouteConfig RouteConfig = ITEMS.get(i);
         ITEMS.remove(i);
         ITEM_MAP.remove(RouteConfig.getId());
-//        ITEMS.add(item);
-//        ITEM_MAP.put(item.id, item);
     }
    
 }

@@ -18,16 +18,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         />
-    <!--    android:listSelector="@color/md_teal_500"-->
-    <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginBottom="16dp"
-                app:srcCompat="@android:drawable/ic_dialog_email" />-->
-    <!-- FloatingActionButton -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

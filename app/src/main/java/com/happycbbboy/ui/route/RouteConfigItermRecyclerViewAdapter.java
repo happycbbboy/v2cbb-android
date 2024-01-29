@@ -42,7 +42,7 @@ public class RouteConfigItermRecyclerViewAdapter extends RecyclerView.Adapter<Ro
 
         public ViewHolder(FragmentRouteConfItermBinding binding) {
             super(binding.getRoot());
-            mNameView = binding.fragmentRouteConfItermName;
+            mNameView = binding.routeItermTitle;
         }
 
     }
