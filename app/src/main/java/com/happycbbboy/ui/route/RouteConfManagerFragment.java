@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +27,10 @@ import com.happycbbboy.domain.RouteConfig;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -80,12 +86,12 @@ public class RouteConfManagerFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(routeConfig -> {
                                 name.setText(routeConfig.getName());
-//                                List<String> route = routeConfig.getRoute();
-//                                route.add("2");
-//                                route.add("1");
-//                                route.add("3");
-//                                ArrayAdapter arrayAdapter = new ArrayAdapter<>(getActivity().getApplication(), android.R.layout.simple_list_item_1, route);
-//                                routeConfigManagerIterms.setAdapter(arrayAdapter);
+                                List<String> route = routeConfig.getRoute();
+                                route.add("2");
+                                route.add("1");
+                                route.add("3");
+                                ArrayAdapter arrayAdapter = new ArrayAdapter<>(getActivity().getApplication(), R.layout.string_iterm, route);
+                                routeConfigManagerIterms.setAdapter(arrayAdapter);
                             },
                             throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
 
@@ -111,6 +117,16 @@ public class RouteConfManagerFragment extends Fragment {
                 RouteConfig routeConfig = new RouteConfig();
                 routeConfig.setId(id);
                 routeConfig.setName(name.getText().toString());
+                ListAdapter adapter = routeConfigManagerIterms.getAdapter();
+                if (adapter!=null) {
+                    CharSequence[] autofillOptions = adapter.getAutofillOptions();
+                    if (autofillOptions!=null) {
+                        List<String> list = Arrays.asList( (String[]) autofillOptions);
+                        routeConfig.setRoute(new ArrayList<String>(list));
+                    }
+                }else {
+                    routeConfig.setRoute(new ArrayList<String>(0));
+                }
 
                 mDisposable.add(routeConfigDao.insertAll(routeConfig)
                         .subscribeOn(Schedulers.io())

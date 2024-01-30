@@ -42,7 +42,7 @@ public class RouteConfListFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                            root.setAdapter(new RouteConfigItermRecyclerViewAdapter(getActivity().getApplication(),list));
+                            root.setAdapter(new RouteConfigItermRecyclerViewAdapter(list));
                         },
                         throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
 

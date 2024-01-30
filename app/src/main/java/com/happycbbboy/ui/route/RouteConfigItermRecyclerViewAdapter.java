@@ -1,6 +1,5 @@
 package com.happycbbboy.ui.route;
 
-import android.app.Application;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class RouteConfigItermRecyclerViewAdapter extends RecyclerView.Adapter<Ro
     private final List<RouteConfig> mValues;
     private RouteConfigDao routeConfigDao = null;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
-    public RouteConfigItermRecyclerViewAdapter(Application application,List<RouteConfig> items) {
+    public RouteConfigItermRecyclerViewAdapter(List<RouteConfig> items) {
         mValues = items;
 
     }
