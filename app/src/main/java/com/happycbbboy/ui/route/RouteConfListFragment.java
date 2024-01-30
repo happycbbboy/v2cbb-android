@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.happycbbboy.databases.RouteConfigDatabase;
 import com.happycbbboy.databases.dao.RouteConfigDao;
 import com.happycbbboy.databinding.FragmentRouteConfListBinding;
-import com.happycbbboy.domain.RouteConfig;
-import com.happycbbboy.ui.route.placeholder.PlaceholderContent;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -40,25 +38,14 @@ public class RouteConfListFragment extends Fragment {
         binding = FragmentRouteConfListBinding.inflate(inflater, container, false);
         RecyclerView root = (RecyclerView)binding.getRoot();
 
-        RouteConfig item = new RouteConfig();
-        item.setId(1);
-        item.setName("tes");
-        PlaceholderContent.addItem(item);
-        RouteConfig item2 = new RouteConfig();
-        item2.setId(12);
-        item2.setName("tes1");
-        PlaceholderContent.addItem(item2);
-
         mDisposable.add(routeConfigDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                            for (RouteConfig routeConfig : list) {
-                                PlaceholderContent.addItem(routeConfig);
-                            }
-                            root.setAdapter(new RouteConfigItermRecyclerViewAdapter(PlaceholderContent.ITEMS));
+                            root.setAdapter(new RouteConfigItermRecyclerViewAdapter(getActivity().getApplication(),list));
                         },
                         throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
+
         return root;
     }
 }

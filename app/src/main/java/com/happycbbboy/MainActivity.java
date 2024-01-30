@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(broadCastReceiver, new IntentFilter(Notify.VPN_CONNECT_ACTION), Context.RECEIVER_EXPORTED);
         List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(this);
         for (AppUtils.AppInfo allInstalledApp : allInstalledApps) {
-            System.out.println( allInstalledApp.getAppName()+"------>"+allInstalledApp.getPackageName());
+            System.out.println(allInstalledApp.getAppName() + "------>" + allInstalledApp.getPackageName());
         }
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -74,10 +74,48 @@ public class MainActivity extends AppCompatActivity {
                 .setOpenableLayout(drawer)
                 .build();
 
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navController.addOnDestinationChangedListener((navController1, navDestination, bundle1) -> {
+            if (menu== null) {
+                return;
+            }
+            int currentDestinationId = navDestination.getId();
+            // 检查是否是回退按钮触发的
+            if (currentDestinationId == R.id.nav_home) {
+                menu.clear();
+                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
+            } else if (currentDestinationId == R.id.proxy_config_iterm_manager_fragment) {
+                menu.clear();
+                //添加标题栏的确定按钮
+                MenuItem submit = menu.add(0, 0, 0, "");
+                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
+                submit.setOnMenuItemClickListener(menuItem -> {
+                    EventBus.getDefault().post(EventBusMsg.PROXY_SETTING_SUBMIT);
+                    return true;
+                });
+                submit.setIcon(R.mipmap.submit_config);//设置图标
+            } else if (currentDestinationId == R.id.route_config_home) {
+                menu.clear();
+                getMenuInflater().inflate(R.menu.route_conf_menu, menu);
+            } else if (currentDestinationId == R.id.route_config_iterm_manager_fragment) {
+                menu.clear();
+                //添加标题栏的确定按钮
+                MenuItem submit = menu.add(0, 0, 0, "");
+                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
+                submit.setOnMenuItemClickListener(menuItem -> {
+                    EventBus.getDefault().post(EventBusMsg.ROUTE_SETTING_SUBMIT);
+                    return true;
+                });
+                submit.setIcon(R.mipmap.submit_config);//设置图标
+            } else {
+                menu.clear();
+                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
+            }
+        });
     }
 
 
@@ -94,15 +132,16 @@ public class MainActivity extends AppCompatActivity {
         // 处理选项菜单项的点击事件
         int itemId = item.getItemId();
         if (itemId == R.id.new_proxy_settings) {
-            OpenNewProxySettings(null);
+            OpenNewSettingPage(R.id.proxy_config_iterm_manager_fragment, null);
             return true;
         } else if (itemId == R.id.new_route_settings) {
+            OpenNewSettingPage(R.id.save_route_config_iterm_manager_fragment, null);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void OpenNewProxySettings(Integer i) {
+    private void OpenNewSettingPage(int idMask, Integer i) {
 
         Bundle bundle = new Bundle();
         if (i != null) {
@@ -113,44 +152,7 @@ public class MainActivity extends AppCompatActivity {
         // 导航到目标 Fragment
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
 
-        navController.addOnDestinationChangedListener((navController1, navDestination, bundle1) -> {
-            int currentDestinationId = navDestination.getId();
-            // 检查是否是回退按钮触发的
-            if (currentDestinationId == R.id.nav_home) {
-                menu.clear();
-                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
-
-            } else if (currentDestinationId == R.id.proxy_config_iterm_manager_fragment){
-                // 启动新的Activity
-                menu.clear();
-                //添加标题栏的确定按钮
-                MenuItem submit = menu.add(0, 0, 0, "");
-                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
-                submit.setOnMenuItemClickListener(menuItem -> {
-                    EventBus.getDefault().post(EventBusMsg.PROXY_SETTING_SUBMIT);
-                    return true;
-                });
-                submit.setIcon(R.mipmap.submit_config);//设置图标
-            } else if (currentDestinationId == R.id.route_config_home){
-                menu.clear();
-                getMenuInflater().inflate(R.menu.route_proxy_menu, menu);
-            } else if (currentDestinationId == R.id.proxy_config_iterm_manager_fragment){
-                // 启动新的Activity
-                menu.clear();
-                //添加标题栏的确定按钮
-                MenuItem submit = menu.add(0, 0, 0, "");
-                submit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);//主要是这句话
-                submit.setOnMenuItemClickListener(menuItem -> {
-                    EventBus.getDefault().post(EventBusMsg.ROUTE_SETTING_SUBMIT);
-                    return true;
-                });
-                submit.setIcon(R.mipmap.submit_config);//设置图标
-            }else {
-                menu.clear();
-                getMenuInflater().inflate(R.menu.proxy_conf_menu, menu);
-            }
-        });
-        navController.navigate(R.id.save_proxy_config_iterm_manager_fragment, bundle);
+        navController.navigate(idMask, bundle);
     }
 
     @Override
@@ -177,7 +179,9 @@ public class MainActivity extends AppCompatActivity {
         EventBusMsg eventBusMsg = event.getEventBusMsg();
         switch (eventBusMsg) {
             case OPEN_PROXY_CONFIG:
-                OpenNewProxySettings(event.getId());
+                OpenNewSettingPage(R.id.save_proxy_config_iterm_manager_fragment, event.getId());
+            case ROUTE_SETTING_SUBMIT:
+                OpenNewSettingPage(R.id.save_route_config_iterm_manager_fragment,  event.getId());
             default:
                 break;
         }

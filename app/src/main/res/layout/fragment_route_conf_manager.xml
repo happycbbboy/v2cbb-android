@@ -28,7 +28,7 @@
             android:textSize="11sp" />
 
         <EditText
-            android:id="@+id/ProxyConfigName"
+            android:id="@+id/route_config_name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -47,22 +47,37 @@
             android:layout_marginTop="20dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="代理配置"
+            android:text="通过路由设置"
             android:textSize="11sp" />
-
-        <EditText
-            android:id="@+id/ProxyConfigJson"
-            android:layout_width="fill_parent"
-            android:layout_height="360dp"
-            android:layout_gravity="left"
+        <ListView
+            android:id="@+id/route_config_manager_iterms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="-10dp"
-            android:gravity="top"
-            android:hint="proxy-conf"
-            android:inputType="textMultiLine"
-            android:textSize="15sp" />
+            />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="包含app设置"
+            android:textSize="11sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="排除app设置"
+            android:textSize="11sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
