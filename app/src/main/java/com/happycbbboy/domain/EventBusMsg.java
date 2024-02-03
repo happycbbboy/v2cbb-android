@@ -1,11 +1,10 @@
 package com.happycbbboy.domain;
 
 public enum EventBusMsg {
-    PROXY_SETTING_SUBMIT("PROXY_SETTING_SUBMIT"),
     OPEN_PROXY_CONFIG("OPEN_PROXY_CONFIG"),
-    START_VPN("START_VPN"),
+    OPEN_ROUTE_CONFIG("OPEN_ROUTE_CONFIG"),
+    PROXY_SETTING_SUBMIT("PROXY_SETTING_SUBMIT"),
     ROUTE_SETTING_SUBMIT("ROUTE_SETTING_SUBMIT"),
-
     ;
     private String msg;
 

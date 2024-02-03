@@ -19,6 +19,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
             versionNameSuffix global_app_version_name
+            jniDebuggable true
+            renderscriptDebuggable true
         }
     }
     compileOptions {
@@ -29,7 +31,6 @@ android {
 
 dependencies {
     compileOnly fileTree(include: ['*.aar','*.jar'], dir: 'libs')
-
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     testImplementation 'junit:junit:4.13.2'

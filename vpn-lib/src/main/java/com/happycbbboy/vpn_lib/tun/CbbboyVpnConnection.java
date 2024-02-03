@@ -19,6 +19,7 @@ package com.happycbbboy.vpn_lib.tun;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Objects;
 
 import sdk.Param;
@@ -184,12 +186,61 @@ public class CbbboyVpnConnection implements Runnable {
         // 配置路由
         VpnService.Builder builder = vpnService.new Builder();
         builder.setMtu(1500);
-        builder.addRoute("0.0.0.0", 0);
-        builder.addAddress("10.0.0.1", 32);
+        List<String> routes = options.getRoute();
+        List<String> excludePackage = options.getExcludePackage();
+        List<String> includePackage = options.getIncludePackage();
 
+        if (routes != null && routes.size() != 0) {
+            for (String s : routes) {
+                try {
+                    // 解析IP地址和子网掩码
+                    String[] parts = s.split("/");
+                    String ipAddress = parts[0];
+                    int subnetMaskLength = Integer.parseInt(parts[1]);
+                    builder.addRoute(ipAddress, subnetMaskLength);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                    vpnSuccessIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.WARMING, "VPN_SERVICE", "net parse routes " + s + "err", e.getMessage()));
+                    vpnService.sendBroadcast(vpnSuccessIntent);
+                }
+            }
+        } else {
+            builder.addRoute("0.0.0.0", 0);
+        }
+
+        builder.addAddress("10.0.0.1", 32);
         builder.addDnsServer("8.8.8.8");
         builder.addDnsServer("114.114.114.114");
         builder.setSession("cbbboy vpn").setConfigureIntent(mConfigureIntent);
+
+//        PackageManager packageManager = vpnService.getPackageManager();
+        if (includePackage != null) {
+            for (String s : includePackage) {
+                try {
+//                    PackageInfo packageInfo = packageManager.getPackageInfo(s, 0);
+                    builder.addAllowedApplication(s);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                    vpnSuccessIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.WARMING, "VPN_SERVICE", "net parse includePackage " + s + "err", e.getMessage()));
+                    vpnService.sendBroadcast(vpnSuccessIntent);
+                }
+            }
+        }
+        if (excludePackage != null) {
+            for (String s : excludePackage) {
+                try {
+//                    packageManager.getPackageInfo(s, 0);
+                    builder.addDisallowedApplication(s);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    Intent vpnSuccessIntent = new Intent(Notify.VPN_CONNECT_ACTION);
+                    vpnSuccessIntent.putExtra(Notify.PARAM_KEY, new Notify(Notify.WARMING, "VPN_SERVICE", "net parse excludePackage " + s + "err", e.getMessage()));
+                    vpnService.sendBroadcast(vpnSuccessIntent);
+                }
+            }
+        }
 
         // Create a new interface using the builder and save the parameters.
         final ParcelFileDescriptor vpnInterface;
@@ -199,7 +250,25 @@ public class CbbboyVpnConnection implements Runnable {
                 mOnEstablishListener.onEstablish(vpnInterface);
             }
         }
+
         return vpnInterface;
     }
 
+    // 根据子网掩码长度获取子网掩码
+    private static String getSubnetMask(int subnetMaskLength) {
+        int[] maskArray = new int[4];
+
+        for (int i = 0; i < 4; i++) {
+            if (subnetMaskLength >= 8) {
+                maskArray[i] = 255;
+                subnetMaskLength -= 8;
+            } else {
+                int shift = 8 - subnetMaskLength;
+                maskArray[i] = 255 << shift;
+                subnetMaskLength = 0;
+            }
+        }
+
+        return maskArray[0] + "." + maskArray[1] + "." + maskArray[2] + "." + maskArray[3];
+    }
 }

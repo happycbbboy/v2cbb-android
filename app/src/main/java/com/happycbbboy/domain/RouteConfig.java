@@ -1,5 +1,6 @@
 package com.happycbbboy.domain;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -64,5 +65,11 @@ public class RouteConfig {
 
     public void setExcludePackage(List<String> excludePackage) {
         this.excludePackage = excludePackage;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
     }
 }

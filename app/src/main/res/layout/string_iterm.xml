@@ -3,13 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="18dp"
     android:background="@color/card_default_color"
     android:padding="30dp"
     app:cardCornerRadius="18dp"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    app:cardElevation="14dp">
+    app:cardElevation="14dp"
+    android:layout_marginTop="-18dp"
+    android:layout_marginBottom="-18dp"
+    app:cardUseCompatPadding="true"
+    >
+<!--
+    android:layout_marginTop="-18dp"
+    android:layout_marginBottom="-18dp"
+    app:cardUseCompatPadding="true"
+-->
 
     <LinearLayout
         android:id="@+id/string_iterm_title_liner_layout"

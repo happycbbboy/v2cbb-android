@@ -18,6 +18,9 @@ public interface RouteConfigDao {
     @Query("SELECT * FROM RouteConfig")
     Flowable<List<RouteConfig>> getAll();
 
+    @Query("SELECT * FROM RouteConfig")
+    List<RouteConfig> getAllSynchronization();
+
     @Query("SELECT * FROM RouteConfig WHERE id IN (:ids)")
     Flowable<List<RouteConfig>> loadAllByIds(int[] ids);
 

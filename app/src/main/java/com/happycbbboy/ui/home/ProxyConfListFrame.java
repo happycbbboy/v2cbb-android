@@ -15,11 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import com.happycbbboy.R;
 import com.happycbbboy.databases.AppDatabase;
+import com.happycbbboy.databases.RouteConfigDatabase;
 import com.happycbbboy.databases.dao.ProxyConfigDao;
+import com.happycbbboy.databases.dao.RouteConfigDao;
 import com.happycbbboy.databinding.ProxyConfigItermListBinding;
+import com.happycbbboy.domain.RouteConfig;
 import com.happycbbboy.domain.VPNOptionsImp;
 import com.happycbbboy.vpn_lib.VPNInterface;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -29,6 +33,7 @@ public class ProxyConfListFrame extends Fragment {
     private Integer currentId;
 
     private ProxyConfigDao proxyConfigDao = null;
+    private RouteConfigDao routeConfigDao = null;
     private final CompositeDisposable mDisposable = new CompositeDisposable();
     //    List<ProxyConfig> proxyConfigArrayList = new ArrayList<>();
     private ProxyConfigItermListBinding binding;
@@ -41,9 +46,9 @@ public class ProxyConfListFrame extends Fragment {
 
         AppDatabase instance = AppDatabase.getInstance(getActivity().getApplication());
         proxyConfigDao = instance.proxyConfigDao();
-
+        RouteConfigDatabase instance1 = RouteConfigDatabase.getInstance(getActivity().getApplication());
+        routeConfigDao = instance1.proxyConfigDao();
         ListView proxyConfList = binding.proxyConfList;
-
         mDisposable.add(proxyConfigDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -60,13 +65,13 @@ public class ProxyConfListFrame extends Fragment {
                                     for (int i = 0; i < parent.getChildCount(); i++) {
                                         View listItem = parent.getChildAt(i);
                                         if (listItem instanceof CardView) {
-                                            ((CardView) listItem).setCardBackgroundColor(getResources().getColor(R.color.card_default_color,null));
+                                            ((CardView) listItem).setCardBackgroundColor(getResources().getColor(R.color.card_default_color, null));
                                         }
                                     }
 
                                     // Highlight the selected item
                                     if (view instanceof CardView) {
-                                        ((CardView) view).setCardBackgroundColor(getResources().getColor(R.color.md_teal_500,null)); // Set your desired highlight color
+                                        ((CardView) view).setCardBackgroundColor(getResources().getColor(R.color.md_teal_500, null)); // Set your desired highlight color
                                     }
                                 }
 
@@ -93,9 +98,15 @@ public class ProxyConfListFrame extends Fragment {
                                     }
                                     VPNOptionsImp vpnOptionsImp = new VPNOptionsImp();
                                     vpnOptionsImp.setProxyConf(proxyConf.getProxyConf());
-//                                    vpnOptionsImp.setRoute(proxyConf.getRoute());
-//                                    vpnOptionsImp.setExcludePackage(proxyConf.getExcludePackage());
-//                                    vpnOptionsImp.setIncludePackage(proxyConf.getIncludePackage());
+                                    RouteConfig routeConfig = new RouteConfig();
+                                    if (proxyConf.getRouteProxyId() != null) {
+                                        Flowable<RouteConfig> byId = routeConfigDao.findById(proxyConf.getRouteProxyId());
+                                        routeConfig = byId.blockingFirst();
+                                    }
+
+                                    vpnOptionsImp.setRoute(routeConfig.getRoute());
+                                    vpnOptionsImp.setExcludePackage(routeConfig.getExcludePackage());
+                                    vpnOptionsImp.setIncludePackage(routeConfig.getIncludePackage());
                                     VPNInterface.Start(getActivity().getApplication(), vpnOptionsImp);
 //                                    ((FloatingActionButton) binding.fab).setImageDrawable(AppCompatResources.getDrawable(requireContext(), android.R.drawable.ic_media_pause));
                                 },

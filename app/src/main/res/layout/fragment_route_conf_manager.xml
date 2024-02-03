@@ -6,78 +6,113 @@
     android:layout_height="match_parent"
     tools:context=".ui.route.RouteConfManagerFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        tools:context=".MainActivity"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_x="11dp"
-            android:layout_y="11dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text="名字"
-            android:textSize="11sp" />
-
-        <EditText
-            android:id="@+id/route_config_name"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="-10dp"
-            android:hint="name"
-            android:inputType="text"
-            android:textSize="15sp" />
+            android:orientation="vertical"
+            tools:context=".MainActivity"
+            tools:ignore="MissingConstraints">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text="通过路由设置"
-            android:textSize="11sp" />
-        <ListView
-            android:id="@+id/route_config_manager_iterms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="-10dp"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_x="11dp"
+                android:layout_y="11dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="名字"
+                android:textSize="11sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text="包含app设置"
-            android:textSize="11sp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="20dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text="排除app设置"
-            android:textSize="11sp" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/route_config_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="-10dp"
+                android:layout_marginRight="15dp"
+                android:hint="name"
+                android:inputType="text"
+                android:textSize="15sp" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:context=".MainActivity"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="通过路由设置"
+                    android:textSize="11sp" />
+
+                <ImageButton
+                    android:id="@+id/add_route_iterm_conf"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/white"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:src="@android:drawable/ic_menu_add"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/route_config_manager_iterms"
+                android:name="com.happycbbboy.ui.base.StringItermAdapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                app:layoutManager="LinearLayoutManager"
+                tools:context=".ui.base.StringItermAdapter"
+                tools:listitem="@layout/string_iterm" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="应用管控"
+                android:textSize="11sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/app_list_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="LinearLayoutManager"
+                tools:context=".ui.base.AppItermAdapter"
+                tools:listitem="@layout/app_iterm" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

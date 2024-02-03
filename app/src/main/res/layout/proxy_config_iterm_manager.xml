@@ -38,12 +38,31 @@
             android:hint="name"
             android:inputType="text"
             android:textSize="15sp" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="路由选项（不选即为全部流量）"
+            android:textSize="11sp" />
+        <Spinner
+            android:id="@+id/proxy_route_config_selector"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/spinner_background"
+            android:dropDownHeight="100dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:focusable="false"
             android:focusableInTouchMode="false"

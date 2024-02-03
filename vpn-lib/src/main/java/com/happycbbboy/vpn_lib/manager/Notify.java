@@ -7,6 +7,7 @@ public class Notify implements Serializable {
     public final  static String PARAM_KEY= "VPN_CONNECT_ACTION_NOTIFY";
 
     public final static Integer SUCCESS= 0;
+    public final static Integer WARMING= 9;
     public final static Integer ERROR= 10;
 
     private Integer code;
