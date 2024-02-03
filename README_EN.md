@@ -68,15 +68,15 @@ Write [v2ray](https://v2ray.com/) config in the proxy configure,You only need to
 
 ## Features
 
--Page optimization: The page configuration is more attractive and user-friendly
--Routing support: IP segment using VPN, some software using VPN, and some software not using VPN
--Advertising filtering: Filter advertisements based on domain name, IP, and URL
--Packet capture: Through our traffic, we capture packets and present them on the page
--Logs: Logs can be displayed on the page and shared on WeChat for users to troubleshoot
--Import traffic strategy: supports importing QR codes, pasting boards, and URLs
--IOS support
--Macos support
--Windows support
+- Routing configuration: Optimize some applications to use VPN, some not to use VPN, optimize the loading speed of routing configuration page
+- Import traffic strategy: supports QR code import, pasteboard import, and url import
+- Page optimization: the page configuration is more beautiful and more user-friendly
+- Ad filtering: filter ads based on domain name, IP, and URL
+- Packet capture: We capture packets through our traffic and display them on the page
+- Log: You can display the log on the page and export it to assist in troubleshooting.
+- ios support
+- macos support
+- windows support
 
 ## Disclaimers
 
