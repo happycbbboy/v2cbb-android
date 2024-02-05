@@ -103,4 +103,5 @@ public class ProxyConfigListViewAdapter extends BaseAdapter {
         public Button edit;
         public Button delete;
     }
+
 }

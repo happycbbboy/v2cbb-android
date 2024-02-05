@@ -87,17 +87,36 @@
                 tools:context=".ui.base.StringItermAdapter"
                 tools:listitem="@layout/string_iterm" />
 
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="20dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:text="应用管控"
-                android:textSize="11sp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                tools:context=".MainActivity"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="15dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="应用流量配置默认方案:"
+                    android:textSize="11sp"/>
+
+                <Spinner
+                    android:id="@+id/route_app_iterm_selector_conf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:dropDownHeight="100dp"
+                    android:background="@drawable/spinner_background"
+                    />
+
+            </LinearLayout>
+
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/app_list_options"
@@ -111,7 +130,6 @@
                 app:layoutManager="LinearLayoutManager"
                 tools:context=".ui.base.AppItermAdapter"
                 tools:listitem="@layout/app_iterm" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

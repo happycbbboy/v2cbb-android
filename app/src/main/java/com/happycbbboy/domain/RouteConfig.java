@@ -18,13 +18,20 @@ public class RouteConfig {
     Integer id;
     @ColumnInfo(name = "name")
     String name;
+
+    public final static int CURRENT_ROUTE_POLICY_NORMAL = 0;
+    public final static int CURRENT_ROUTE_POLICY_FREEE = 1;
+    public final static int CURRENT_ROUTE_POLICY_TUNNEL = 2;
+
+    @ColumnInfo(name = "current_route_policy")
+    Integer currentRoutePolicy;
+
     @ColumnInfo(name = "route")
     List<String> route;
 
     @ColumnInfo(name = "include_package")
-    List<String> includePackage;
-    @ColumnInfo(name = "exclude_package")
-    List<String> excludePackage;
+    List<String> checkPackages;
+
 
 
     public Integer getId() {
@@ -51,20 +58,20 @@ public class RouteConfig {
         this.route = route;
     }
 
-    public List<String> getIncludePackage() {
-        return includePackage;
+    public Integer getCurrentRoutePolicy() {
+        return currentRoutePolicy;
     }
 
-    public void setIncludePackage(List<String> includePackage) {
-        this.includePackage = includePackage;
+    public void setCurrentRoutePolicy(Integer currentRoutePolicy) {
+        this.currentRoutePolicy = currentRoutePolicy;
     }
 
-    public List<String> getExcludePackage() {
-        return excludePackage;
+    public List<String> getCheckPackages() {
+        return checkPackages;
     }
 
-    public void setExcludePackage(List<String> excludePackage) {
-        this.excludePackage = excludePackage;
+    public void setCheckPackages(List<String> checkPackages) {
+        this.checkPackages = checkPackages;
     }
 
     @NonNull

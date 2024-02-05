@@ -155,6 +155,7 @@ public class ProxyConfListItermManagerFrame extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        mDisposable.dispose();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

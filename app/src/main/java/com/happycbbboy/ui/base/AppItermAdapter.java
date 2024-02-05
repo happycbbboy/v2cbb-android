@@ -1,41 +1,31 @@
 package com.happycbbboy.ui.base;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.happycbbboy.R;
 import com.happycbbboy.databinding.AppItermBinding;
-import com.happycbbboy.ui.selector.SpinnerImageTextAdapter;
 import com.happycbbboy.utils.AppUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppItermAdapter extends RecyclerView.Adapter<AppItermAdapter.ViewHolder> {
 
     List<AppUtils.AppInfo> allApps;
+    private static LayoutInflater inflater;
 
-    /*    List<String> includePackageName;
-        List<String> excludePackageName;
-
-        public List<String> getIncludePackageName() {
-            return includePackageName;
-        }
-
-        public List<String> getExcludePackageName() {
-            return excludePackageName;
-        }*/
     public List<AppUtils.AppInfo> getAllApps() {
         return allApps;
     }
 
-    public AppItermAdapter(List<AppUtils.AppInfo> allApps) {
+    public AppItermAdapter(Context context,List<AppUtils.AppInfo> allApps) {
+        if (inflater==null) {
+            inflater = LayoutInflater.from(context);
+        }
         this.allApps = allApps;
 //        this.includePackageName = includePackageName;
 //        this.excludePackageName = excludePackageName;
@@ -44,34 +34,29 @@ public class AppItermAdapter extends RecyclerView.Adapter<AppItermAdapter.ViewHo
     @NonNull
     @Override
     public AppItermAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AppItermAdapter.ViewHolder(AppItermBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(AppItermBinding.inflate(inflater, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AppItermAdapter.ViewHolder holder, int position) {
-        Log.i("AppItermAdapter","onBindViewHolder accept");
-
+//        Log.i("AppItermAdapter", "onBindViewHolder accept:"+holder);
         AppUtils.AppInfo appInfo = allApps.get(position);
-        holder.binding.appItermIcon.setImageDrawable(appInfo.getAppIcon());
+        holder.bind(appInfo);
+       /* holder.binding.appItermIcon.setImageDrawable(appInfo.getAppIcon());
         holder.binding.appNameTextView.setText(appInfo.getAppName());
         holder.binding.packageNameTextView.setText(appInfo.getPackageName());
-        // 使用 ArrayAdapter 设置 Spinner 的选项
-        SpinnerImageTextAdapter spinnerImageTextAdapter = new SpinnerImageTextAdapter(holder.itemView.getContext(), R.layout.selector_image_text_iterm, selectorImageTextIterms);
-        spinnerImageTextAdapter.setDropDownViewResource(R.layout.selector_image_text_iterm);
-        holder.binding.routeAppItermSpinner.setAdapter(spinnerImageTextAdapter);
-        holder.binding.routeAppItermSpinner.setSelection(appInfo.getPolicy());
-        holder.binding.routeAppItermSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        holder.binding.appItermCheckbox.setChecked(appInfo.getCheck());
+        // 设置CheckBox状态变化的监听器
+        holder.binding.appItermCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Get the selected item from the spinner
-                SpinnerImageTextAdapter.SelectorImageTextIterm selectedIterm = selectorImageTextIterms.get(position);
-                appInfo.setPolicy(selectedIterm.getPolicy());
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    appInfo.setCheck(true);
+                } else {
+                    appInfo.setCheck(false);
+                }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+        });*/
     }
 
 
@@ -87,13 +72,31 @@ public class AppItermAdapter extends RecyclerView.Adapter<AppItermAdapter.ViewHo
             super(binding.getRoot());
             this.binding = binding;
         }
+
+        public void bind(@NonNull AppUtils.AppInfo appInfo) {
+//            if (appInfo.getIniTial()) {
+//                binding.appItermCheckbox.setChecked(appInfo.getCheck());
+//                return;
+//            }
+            // 在这里将数据绑定到视图上
+            binding.appItermIcon.setImageDrawable(appInfo.getAppIcon());
+            binding.appNameTextView.setText(appInfo.getAppName());
+            binding.packageNameTextView.setText(appInfo.getPackageName());
+            binding.appItermCheckbox.setChecked(appInfo.getCheck());
+
+            // 设置CheckBox状态变化的监听器
+            binding.appItermCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        appInfo.setCheck(true);
+                    } else {
+                        appInfo.setCheck(false);
+                    }
+                }
+            });
+//            appInfo.setIniTial(true);
+        }
     }
 
-    static List<SpinnerImageTextAdapter.SelectorImageTextIterm> selectorImageTextIterms = new ArrayList<>();
-
-    static {
-        selectorImageTextIterms.add(new SpinnerImageTextAdapter.SelectorImageTextIterm("默认", R.drawable.grey_dot, AppUtils.AppInfo.NORMAL));
-        selectorImageTextIterms.add(new SpinnerImageTextAdapter.SelectorImageTextIterm("放行", R.drawable.red_dot, AppUtils.AppInfo.FREEE));
-        selectorImageTextIterms.add(new SpinnerImageTextAdapter.SelectorImageTextIterm("拦截", R.drawable.gree_dot, AppUtils.AppInfo.TUNNEL));
-    }
 }

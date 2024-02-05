@@ -105,8 +105,15 @@ public class ProxyConfListFrame extends Fragment {
                                     }
 
                                     vpnOptionsImp.setRoute(routeConfig.getRoute());
-                                    vpnOptionsImp.setExcludePackage(routeConfig.getExcludePackage());
-                                    vpnOptionsImp.setIncludePackage(routeConfig.getIncludePackage());
+                                    if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_NORMAL) {
+
+                                    }else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_FREEE) {
+                                        vpnOptionsImp.setIncludePackage(routeConfig.getCheckPackages());
+                                    }else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_TUNNEL) {
+                                        vpnOptionsImp.setExcludePackage(routeConfig.getCheckPackages());
+                                    }
+//                                    vpnOptionsImp.setExcludePackage(routeConfig.getExcludePackage());
+//                                    vpnOptionsImp.setIncludePackage(routeConfig.getIncludePackage());
                                     VPNInterface.Start(getActivity().getApplication(), vpnOptionsImp);
 //                                    ((FloatingActionButton) binding.fab).setImageDrawable(AppCompatResources.getDrawable(requireContext(), android.R.drawable.ic_media_pause));
                                 },
@@ -128,5 +135,11 @@ public class ProxyConfListFrame extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDisposable.dispose();
     }
 }

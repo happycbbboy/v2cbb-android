@@ -77,6 +77,5 @@ public class RouteConfigItermRecyclerViewAdapter extends RecyclerView.Adapter<Ro
             routeItermEdit = binding.routeItermEdit;
             routeItermDelete = binding.routeItermDelete;
         }
-
     }
 }

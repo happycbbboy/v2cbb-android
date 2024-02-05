@@ -2,7 +2,6 @@ package com.happycbbboy.utils;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -12,53 +11,76 @@ import java.util.List;
 
 public class AppUtils {
     static PackageManager packageManager;
-    static List<PackageInfo> packagesCache;
+//    static List<PackageInfo> packagesCache;
+    static List<ApplicationInfo> packagesCache;
+//    static List<ResolveInfo> packagesCache;
+    static List<AppInfo> appInfoList;
 
-    public static List<AppInfo> getAllInstalledApps(Context context, List<String> includePackage, List<String> excludePackage) {
-        if ( packageManager == null) {
+    public static synchronized List<AppInfo> getAllInstalledApps(Context context, String keyWord, List<String> includePackage) {
+        if (packageManager == null) {
             packageManager = context.getPackageManager();
         }
 
-        if ( packagesCache == null) {
-            packagesCache = packageManager.getInstalledPackages(PackageManager.GET_SERVICES);
+        if (packagesCache == null || packagesCache.size() != 0) {
+//            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            packagesCache = packageManager.getInstalledApplications(0);
+//            packagesCache = packageManager.queryIntentActivities(intent,0);
         }
-        // 获取所有已安装应用的信息
-        List<AppInfo> appInfoList = new ArrayList<>(packagesCache.size());
+        ArrayList<AppInfo> resAppInfoList = new ArrayList<>();
 
-        for (PackageInfo packageInfo : packagesCache) {
-            String appName = packageInfo.applicationInfo.loadLabel(packageManager).toString();
-            String packageName = packageInfo.packageName;
-            Drawable appIcon = packageInfo.applicationInfo.loadIcon(packageManager);
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                continue;
+        // 获取所有已安装应用的信息
+        if (appInfoList == null || appInfoList.size() == 0) {
+            appInfoList = new ArrayList<>(packagesCache.size());
+//            for (ResolveInfo packageInfo : packagesCache) {
+                for (ApplicationInfo packageInfo : packagesCache) {
+                Drawable appIcon = packageInfo.loadIcon(packageManager);
+                String appName = packageInfo.loadLabel(packageManager).toString();
+                String packageName = packageInfo.packageName;
+//                String packageName = packageInfo.activityInfo.packageName;
+
+                AppInfo appInfo = new AppInfo(appName, packageName, appIcon);
+                appInfoList.add(appInfoList.size(), appInfo);
+
+/*                if (keyWord != null && !"".equals(keyWord) && !packageName.contains(keyWord) && !appName.contains(keyWord)) {
+                    continue;
+                }*/
+                if (includePackage.contains(packageName)) {
+                    appInfo.setCheck(true);
+//                    appInfoList.add(0, appInfo);
+                    resAppInfoList.add(0, appInfo);
+                    continue;
+                }
+                appInfo.setCheck(false);
+                resAppInfoList.add(appInfo);
             }
-            AppInfo appInfo = new AppInfo(appName, packageName, appIcon);
-            if (includePackage.contains(packageName)) {
-                appInfo.setPolicy(AppInfo.TUNNEL);
-                appInfoList.add(0, appInfo);
-                continue;
+        } else {
+            for (AppInfo appInfo : appInfoList) {
+/*                if (keyWord != null && !"".equals(keyWord) && !appInfo.getPackageName().contains(keyWord) && !appInfo.getAppName().contains(keyWord)) {
+                    continue;
+                }*/
+                if (includePackage.contains(appInfo.getPackageName())) {
+                    appInfo.setCheck(true);
+                    resAppInfoList.add(0,appInfo);
+                    continue;
+                }
+                appInfo.setCheck(false);
+                resAppInfoList.add(appInfo);
             }
-            if (excludePackage.contains(packageName)) {
-                appInfo.setPolicy(AppInfo.FREEE);
-                appInfoList.add(Math.min(appInfoList.size(), includePackage.size()), appInfo);
-                continue;
-            }
-            appInfoList.add(appInfoList.size(), appInfo);
         }
 
 
         Log.i("RouteConfManagerFragment", "appInfoList len:" + appInfoList.size());
-        return appInfoList;
+        return resAppInfoList;
     }
 
     public static class AppInfo {
-        public final static int NORMAL = 0;
-        public final static int FREEE = 1;
-        public final static int TUNNEL = 2;
         private String appName;
         private String packageName;
         private Drawable appIcon;
-        private int policy = NORMAL;
+        private boolean check;
+//        private boolean iniTial  = false;
+//        private AppItermAdapter.ViewHolder appItermViewHolder;
 
         public AppInfo(String appName, String packageName, Drawable appIcon) {
             this.appName = appName;
@@ -78,12 +100,38 @@ public class AppUtils {
             return appIcon;
         }
 
-        public int getPolicy() {
-            return policy;
+        public Boolean getCheck() {
+            return check;
         }
 
-        public void setPolicy(int policy) {
-            this.policy = policy;
+      /*  public AppItermAdapter.ViewHolder getAppItermViewHolder() {
+            return appItermViewHolder;
+        }
+
+        public void setAppItermViewHolder(AppItermAdapter.ViewHolder appItermViewHolder) {
+            this.appItermViewHolder = appItermViewHolder;
+        }
+
+        public Boolean getIniTial() {
+            return iniTial;
+        }
+
+        public void setIniTial(boolean iniTial) {
+            this.iniTial = iniTial;
+        }*/
+
+        public void setCheck(Boolean check) {
+            this.check = check;
+        }
+
+        @Override
+        public String toString() {
+            return "AppInfo{" +
+                    "appName='" + appName + '\'' +
+                    ", packageName='" + packageName + '\'' +
+                    ", appIcon=" + appIcon +
+                    ", check=" + check +
+                    '}';
         }
     }
 }
