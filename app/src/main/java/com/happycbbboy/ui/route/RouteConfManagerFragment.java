@@ -1,11 +1,13 @@
 package com.happycbbboy.ui.route;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -56,6 +58,8 @@ public class RouteConfManagerFragment extends Fragment {
     private RecyclerView appListOptions;
     private Spinner routeAppItrmSelectorConf;
 
+    private List<AppUtils.AppInfo> allInstalledApps;
+
     static List<SpinnerImageTextAdapter.SelectorImageTextIterm> selectorImageTextIterms = new ArrayList<>();
 
     static {
@@ -99,6 +103,11 @@ public class RouteConfManagerFragment extends Fragment {
         addRouteItermConf = (ImageButton) getView().findViewById(R.id.add_route_iterm_conf);
         appListOptions = (RecyclerView) getView().findViewById(R.id.app_list_options);
         routeAppItrmSelectorConf = (Spinner) getView().findViewById(R.id.route_app_iterm_selector_conf);
+
+        EditText searcher = getView().findViewById(R.id.app_list_options_searcher);
+        Button searcherBtn = (Button) getView().findViewById(R.id.app_list_options_searcher_submit);
+
+
         addRouteItermConf.setOnClickListener(v -> {
             RecyclerView.Adapter routeConfigAdapter = routeConfigManagerItems.getAdapter();
             if (routeConfigAdapter != null) {
@@ -117,7 +126,7 @@ public class RouteConfManagerFragment extends Fragment {
         SpinnerImageTextAdapter spinnerImageTextAdapter = new SpinnerImageTextAdapter(requireContext(), R.layout.selector_image_text_iterm, selectorImageTextIterms);
         spinnerImageTextAdapter.setDropDownViewResource(R.layout.selector_image_text_iterm);
         routeAppItrmSelectorConf.setAdapter(spinnerImageTextAdapter);
-        // 添加滚动监听器实现预加载
+        // 添加滚动监听器实现预加载 （好像没用）
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setInitialPrefetchItemCount(256); // 设置预加载的Item数量
         appListOptions.setLayoutManager(layoutManager);
@@ -132,46 +141,38 @@ public class RouteConfManagerFragment extends Fragment {
                                 name.setText(routeConfig.getName());
                                 StringItermAdapter stringItermAdapter = new StringItermAdapter(routeConfig.getRoute());
                                 routeConfigManagerItems.setAdapter(stringItermAdapter);
-                                List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(getContext(), "", routeConfig.getCheckPackages());
+
+                                allInstalledApps = AppUtils.getAllInstalledApps(getContext(), "", routeConfig.getCheckPackages());
                                 AppItermAdapter adapter = new AppItermAdapter(requireContext(), allInstalledApps);
                                 appListOptions.setAdapter(adapter);
-/*                                // 高速缓存 不再每次调用on create
-                                ViewCacheExtension extension = new ViewCacheExtension(allInstalledApps, adapter, position -> {
-                                    AppUtils.AppInfo appInfo = allInstalledApps.get(position);
-                                    return appInfo.toString();
-                                });
-                                appListOptions.setViewCacheExtension(extension);*/
-
                                 // 设置路由策略
                                 routeAppItrmSelectorConf.setSelection(routeConfig.getCurrentRoutePolicy());
-                                routeAppItrmSelectorConf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                                        // Get the selected item from the spinner
-                                        SpinnerImageTextAdapter.SelectorImageTextIterm selectedIterm = selectorImageTextIterms.get(position);
-                                        routeConfig.setCurrentRoutePolicy(selectedIterm.getPolicy());
-                                    }
-
-                                    @Override
-                                    public void onNothingSelected(AdapterView<?> parentView) {
-                                    }
-                                });
-
                             },
                             throwable -> Log.e("onViewCreated", "proxyConfigDao get all:", throwable)));
         } else {
             routeAppItrmSelectorConf.setSelection(RouteConfig.CURRENT_ROUTE_POLICY_NORMAL);
-
-            List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(requireContext(), "", new ArrayList<>(0));
+            allInstalledApps = AppUtils.getAllInstalledApps(requireContext(), "", new ArrayList<>(0));
 //            AppItermAdapter adapter = new AppItermAdapter(requireContext(), new ArrayList<>(allInstalledApps.subList(0, Math.min(AppItermAdapter.INITIAL_SIZE, allInstalledApps.size()))));
-            AppItermAdapter adapter = new AppItermAdapter(requireContext(),allInstalledApps);
+            AppItermAdapter adapter = new AppItermAdapter(requireContext(), allInstalledApps);
             appListOptions.setAdapter(adapter);
-
         }
-        // 设置自定义的缓存逻辑
-        // 在Fragment或Activity中
-
+        searcherBtn.setOnClickListener(v -> {
+            hideKeyboard(requireActivity());
+            searcher.clearFocus();
+            String text = searcher.getText().toString();
+            appListOptions.setAdapter(new AppItermAdapter(requireContext(), AppUtils.searchKeyWord(allInstalledApps,text) ));
+        });
         Log.i("RouteConfManagerFragment", "start onViewCreated end");
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -185,7 +186,6 @@ public class RouteConfManagerFragment extends Fragment {
         mDisposable.dispose();
         EventBus.getDefault().unregister(this);
     }
-// EventBus.getDefault().post(EventBusMsg.ROUTE_SETTING_SUBMIT);
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void FragmentButtonClicked(EventBusMsg event) {
@@ -220,26 +220,15 @@ public class RouteConfManagerFragment extends Fragment {
                     }
                 }
                 routeConfig.setRoute(routes);
-                AppItermAdapter adapter = (AppItermAdapter) appListOptions.getAdapter();
-                List<AppUtils.AppInfo> allApps = adapter.getAllApps();
-//                ArrayList<String> tunnelList = new ArrayList<>();
-//                ArrayList<String> freeList = new ArrayList<>();
                 ArrayList<String> appPackageCheckList = new ArrayList<>();
-                for (AppUtils.AppInfo allApp : allApps) {
+                for (AppUtils.AppInfo allApp : allInstalledApps) {
                     if (allApp.getCheck()) {
                         appPackageCheckList.add(allApp.getPackageName());
                     }
-                    /*if (allApp.getPolicy() == AppUtils.AppInfo.FREEE) {
-                        freeList.add(allApp.getPackageName());
-                    } else if (allApp.getPolicy() == AppUtils.AppInfo.TUNNEL) {
-                        tunnelList.add(allApp.getPackageName());
-                    }*/
                 }
                 routeConfig.setCheckPackages(appPackageCheckList);
                 int selectedItemPosition = routeAppItrmSelectorConf.getSelectedItemPosition();
                 routeConfig.setCurrentRoutePolicy(selectedItemPosition);
-//                routeConfig.setIncludePackage(tunnelList);
-//                routeConfig.setExcludePackage(freeList);
 
                 mDisposable.add(routeConfigDao.insertAll(routeConfig)
                         .subscribeOn(Schedulers.io())

@@ -56,4 +56,16 @@
 
     <color name="default_background">#3DDCA4</color>
 
+
+<!--    <color name="md_blue_grey_50">#59a5f5</color>
+    <color name="md_blue_grey_100">#59a5f5;</color>
+    <color name="md_blue_grey_200">#c8ffff;</color>
+    <color name="md_blue_grey_300">#00BFFF</color>
+    <color name="md_blue_grey_400">#00619a</color>
+    <color name="md_blue_grey_500">#333333</color>
+    <color name="md_blue_grey_600">#5c5c5c</color>
+    <color name="md_blue_grey_700">#FFFFFF</color>
+    <color name="md_blue_grey_800">#f5f5f5</color>
+    <color name="md_blue_grey_900">#cccccc</color>-->
+
 </resources>

@@ -1,0 +1,14 @@
+<!-- button_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="8dp" /> <!-- 设置圆角半径 -->
+    <solid android:color="@android:color/transparent" /> <!-- 设置背景颜色为透明 -->
+    <!-- 在shape中添加一个图标 -->
+    <item
+        android:width="24dp"
+        android:height="24dp"
+        android:drawable="@android:drawable/ic_menu_search"
+        android:gravity="center"
+        android:left="16dp"
+        android:right="16dp" />
+</shape>
