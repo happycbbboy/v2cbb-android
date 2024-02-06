@@ -68,11 +68,10 @@ Write [v2ray](https://v2ray.com/) config in the proxy configure,You only need to
 
 ## Features
 
-- Routing configuration: Optimize some applications to use VPN, some not to use VPN, optimize the loading speed of routing configuration page
+- Import traffic strategy: configure page optimization
 - Import traffic strategy: supports QR code import, pasteboard import, and url import
-- Page optimization: the page configuration is more beautiful and more user-friendly
 - Ad filtering: filter ads based on domain name, IP, and URL
-- Packet capture: We capture packets through our traffic and display them on the page
+- Packet capture: We capture the passing traffic and display it on the page
 - Log: You can display the log on the page and export it to assist in troubleshooting.
 - ios support
 - macos support
