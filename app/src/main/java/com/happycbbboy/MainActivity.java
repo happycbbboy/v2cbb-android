@@ -33,19 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Menu menu;
 
-/*    private final BroadcastReceiver vpnSuccessReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Notify vpnParam = (Notify) intent.getExtras().get(Notify.PARAM_KEY);
-            if (vpnParam != null) {
-                Toast.makeText(MainActivity.this, vpnParam.getTitle() + ":" + vpnParam.getMsg(), Toast.LENGTH_SHORT).show();
-                if (!Objects.equals(vpnParam.getCode(), Notify.SUCCESS)) {
-                    Log.e("VPN_SERVICE", vpnParam.getError());
-                }
-            }
-        }
-    };*/
-
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package com.happycbbboy.ui.base;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -22,8 +23,8 @@ public class AppItermAdapter extends RecyclerView.Adapter<AppItermAdapter.ViewHo
         return allApps;
     }
 
-    public AppItermAdapter(Context context,List<AppUtils.AppInfo> allApps) {
-        if (inflater==null) {
+    public AppItermAdapter(Context context, List<AppUtils.AppInfo> allApps) {
+        if (inflater == null) {
             inflater = LayoutInflater.from(context);
         }
         this.allApps = allApps;
@@ -34,12 +35,13 @@ public class AppItermAdapter extends RecyclerView.Adapter<AppItermAdapter.ViewHo
     @NonNull
     @Override
     public AppItermAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.i("AppItermAdapter", "onCreateViewHolder accept");
         return new ViewHolder(AppItermBinding.inflate(inflater, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AppItermAdapter.ViewHolder holder, int position) {
-//        Log.i("AppItermAdapter", "onBindViewHolder accept:"+holder);
+        Log.i("AppItermAdapter", "onBindViewHolder accept:" + position);
         AppUtils.AppInfo appInfo = allApps.get(position);
         holder.bind(appInfo);
        /* holder.binding.appItermIcon.setImageDrawable(appInfo.getAppIcon());

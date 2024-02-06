@@ -21,7 +21,7 @@ public class AppUtils {
             packageManager = context.getPackageManager();
         }
 
-        if (packagesCache == null || packagesCache.size() != 0) {
+        if (packagesCache == null || packagesCache.size() == 0) {
 //            Intent intent = new Intent(Intent.ACTION_MAIN, null);
 //            intent.addCategory(Intent.CATEGORY_LAUNCHER);
             packagesCache = packageManager.getInstalledApplications(0);

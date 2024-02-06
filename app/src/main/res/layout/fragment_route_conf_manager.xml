@@ -73,6 +73,7 @@
                     android:src="@android:drawable/ic_menu_add"
                     tools:ignore="SmallSp" />
             </LinearLayout>
+<!--            android:layout_height="wrap_content"-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/route_config_manager_iterms"
@@ -117,16 +118,19 @@
             </LinearLayout>
 
 
+<!--            android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/app_list_options"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
                 android:clipToPadding="false"
+                android:nestedScrollingEnabled="true"
                 android:scrollbars="vertical"
-                android:nestedScrollingEnabled="false"
                 app:layoutManager="LinearLayoutManager"
                 tools:context=".ui.base.AppItermAdapter"
                 tools:listitem="@layout/app_iterm" />

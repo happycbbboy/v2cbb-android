@@ -119,8 +119,9 @@ public class RouteConfManagerFragment extends Fragment {
         routeAppItrmSelectorConf.setAdapter(spinnerImageTextAdapter);
         // 添加滚动监听器实现预加载
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        layoutManager.setInitialPrefetchItemCount(256); // 设置预加载的Item数量
         appListOptions.setLayoutManager(layoutManager);
-        layoutManager.setInitialPrefetchItemCount(10); // 设置预加载的Item数量
+        appListOptions.setItemViewCacheSize(256);
         Log.i("RouteConfManagerFragment", "start get app info");
 
         if (id != null) {
@@ -131,8 +132,8 @@ public class RouteConfManagerFragment extends Fragment {
                                 name.setText(routeConfig.getName());
                                 StringItermAdapter stringItermAdapter = new StringItermAdapter(routeConfig.getRoute());
                                 routeConfigManagerItems.setAdapter(stringItermAdapter);
-                                List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(getContext(),"", routeConfig.getCheckPackages());
-                                AppItermAdapter adapter = new AppItermAdapter(requireContext(),allInstalledApps);
+                                List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(getContext(), "", routeConfig.getCheckPackages());
+                                AppItermAdapter adapter = new AppItermAdapter(requireContext(), allInstalledApps);
                                 appListOptions.setAdapter(adapter);
 /*                                // 高速缓存 不再每次调用on create
                                 ViewCacheExtension extension = new ViewCacheExtension(allInstalledApps, adapter, position -> {
@@ -161,15 +162,11 @@ public class RouteConfManagerFragment extends Fragment {
         } else {
             routeAppItrmSelectorConf.setSelection(RouteConfig.CURRENT_ROUTE_POLICY_NORMAL);
 
-            List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(requireContext(),"", new ArrayList<>(0));
+            List<AppUtils.AppInfo> allInstalledApps = AppUtils.getAllInstalledApps(requireContext(), "", new ArrayList<>(0));
+//            AppItermAdapter adapter = new AppItermAdapter(requireContext(), new ArrayList<>(allInstalledApps.subList(0, Math.min(AppItermAdapter.INITIAL_SIZE, allInstalledApps.size()))));
             AppItermAdapter adapter = new AppItermAdapter(requireContext(),allInstalledApps);
             appListOptions.setAdapter(adapter);
-            // 高速缓存 不再每次调用on create
-/*            ViewCacheExtension extension = new ViewCacheExtension(allInstalledApps, adapter, position -> {
-                AppUtils.AppInfo appInfo = allInstalledApps.get(position);
-                return appInfo.toString();
-            });
-            appListOptions.setViewCacheExtension(extension);*/
+
         }
         // 设置自定义的缓存逻辑
         // 在Fragment或Activity中
