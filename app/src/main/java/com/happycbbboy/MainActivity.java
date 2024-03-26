@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
-
+// test
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private Menu menu;
