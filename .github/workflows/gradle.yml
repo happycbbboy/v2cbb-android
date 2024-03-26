@@ -20,9 +20,6 @@ jobs:
 
       # 打包release
       - name: Build with Gradle
-        env:
-          PASSWORD: ${{ secrets.PASSWORD }}
-          ALIAS: ${{ secrets.ALIAS }}
         run: |
           bash ./gradlew assembleRelease
 
