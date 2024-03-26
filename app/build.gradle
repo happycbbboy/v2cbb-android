@@ -14,6 +14,9 @@ android {
         versionName global_app_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 修改安装包的名称
+        setProperty("archivesBaseName", "v2cbb-android")
+
     }
     buildTypes {
         release {
