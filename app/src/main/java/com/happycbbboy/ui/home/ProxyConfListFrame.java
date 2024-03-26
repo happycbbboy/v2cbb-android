@@ -106,9 +106,9 @@ public class ProxyConfListFrame extends Fragment {
 
                                     vpnOptionsImp.setRoute(routeConfig.getRoute());
                                     if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_NORMAL) {
-                                    }else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_FREEE) {
+                                    } else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_FREEE) {
                                         vpnOptionsImp.setExcludePackage(routeConfig.getCheckPackages());
-                                    }else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_TUNNEL) {
+                                    } else if (routeConfig.getCurrentRoutePolicy() == RouteConfig.CURRENT_ROUTE_POLICY_TUNNEL) {
                                         vpnOptionsImp.setIncludePackage(routeConfig.getCheckPackages());
                                     }
 //                                    vpnOptionsImp.setExcludePackage(routeConfig.getExcludePackage());
