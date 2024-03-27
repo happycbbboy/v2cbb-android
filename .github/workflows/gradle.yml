@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app
-          path: app/build/outputs/apk/release/v2cbb-android.apk
+          path: app/build/outputs/apk/release/v2cbb-android-release.apk
 
       # 创建realease
       - name: Create Release
