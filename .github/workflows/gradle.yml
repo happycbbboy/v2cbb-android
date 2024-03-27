@@ -50,6 +50,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.myself }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/release/v2cbb-android.apk
+          asset_path: app/build/outputs/apk/release/v2cbb-android-release.apk
           asset_name: v2cbb-android.apk
           asset_content_type: application/vnd.android.package-archiv
